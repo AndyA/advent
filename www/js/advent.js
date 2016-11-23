@@ -1,9 +1,9 @@
 $(function() {
-  console.log("Let's go!");
 
   var bgImageURL = "i/background.jpg";
   var bgImage = null;
   var snowStorm = null;
+  var offScreenCanvas = null;
 
   var images = {
     background: "i/background.jpg",
@@ -21,7 +21,7 @@ $(function() {
       var name = "day" + (n + 1);
       nodes[name] = {
         icon: Math.random() > 0.5 ? "redball" : "greenball",
-        r: 10 + Math.random() * 20
+        r: 20 + Math.random() * 30
       };
     }
 
@@ -52,71 +52,6 @@ $(function() {
     });
   }
 
-  function SnowStorm(options) {
-    this.opt = options;
-    this.flakes = [];
-    this.setDrift(0);
-  }
-
-  $.extend(SnowStorm.prototype, {
-    setDrift: function(n) {
-      this.drift = n;
-    },
-
-    makeFlake: function() {
-      return {
-        x: Math.random(),
-        y: 0,
-        v: (1 + Math.random()) / 200,
-        r: Math.random() * Math.random() * 4 + 2
-      };
-    },
-
-    update: function() {
-      var flakes = [];
-
-      for (var i = 0; i < this.flakes.length; i++) {
-        var flake = this.flakes[i];
-        flake.y += flake.v;
-        if (flake.y >= 1.0) continue;
-        flake.x += this.drift / 100;
-        if (flake.x < 0) flake.x += 1.0;
-        if (flake.x > 1.0) flake.x -= 1.0;
-        flake.v *= this.opt.gravity;
-        flakes.push(flake);
-      }
-
-      var need = Math.min(this.opt.birthRate, this.opt.flakes -
-        flakes.length);
-      for (var i = 0; i < need; i++) {
-        flakes.push(this.makeFlake());
-      }
-
-      this.flakes = flakes;
-    },
-
-    redraw: function(ctx) {
-      this.update();
-
-      var flakes = this.flakes;
-      var cw = ctx.canvas.width;
-      var ch = ctx.canvas.height;
-
-      ctx.save();
-      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-      for (var i = 0; i < flakes.length; i++) {
-        var flake = flakes[i];
-        ctx.beginPath();
-        ctx.arc(flake.x * cw, flake.y * ch, flake.r, 0, 2 * Math.PI,
-          false);
-        ctx.fill();
-      }
-
-
-      ctx.restore();
-    }
-  });
-
   function fillBox(ctx, img) {
     var cw = ctx.canvas.width;
     var ch = ctx.canvas.height;
@@ -130,11 +65,17 @@ $(function() {
       var sc = cw / iw;
       ctx.drawImage(img, 0, (ih - ch / sc) / 2, iw, ch / sc, 0, 0, cw, ch);
     }
+  }
 
+  function scaleVector(dx, dy, len) {
+    var curLen = Math.sqrt(dx * dx + dy * dy);
+    return {
+      dx: dx * len / curLen,
+      dy: dy * len / curLen
+    };
   }
 
   var Renderer = function(canvas, click) {
-    var textShadow = false;
     var ctx = canvas.getContext("2d");
     var ps;
 
@@ -146,40 +87,74 @@ $(function() {
         that.initMouseHandling();
       },
 
-      redraw: function() {
+      drawOverlay: function(ctx) {
         ctx.save();
+        snowStorm.redraw(ctx);
+        ctx.restore();
 
-
-        if (0) {
-          ctx.fillStyle = "white";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        } else {
-          if (imageStore.background) {
-            fillBox(ctx, imageStore.background);
-          } else {
-            ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
-
-          snowStorm.redraw(ctx);
-        }
+        ctx.save();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
 
         ps.eachEdge(function(edge, pt1, pt2) {
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-          ctx.lineWidth = 3;
-          ctx.setLineDash([8, 8]);
+
+          var dx = pt2.x - pt1.x;
+          var dy = pt2.y - pt1.y;
+
           ctx.beginPath();
           ctx.moveTo(pt1.x, pt1.y);
           ctx.lineTo(pt2.x, pt2.y);
           ctx.stroke();
         })
 
+        ctx.restore();
+
+        ctx.save();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.lineWidth = 2;
+
         ps.eachNode(function(node, pt) {
-          var img = imageStore[node.data.icon];
-          if (!img) return;
           var nw = node.data.r;
-          ctx.drawImage(img, pt.x - nw, pt.y - nw, nw * 2, nw * 2);
-        })
+
+          // Outer circle
+          ctx.beginPath();
+          ctx.moveTo(pt.x + nw, pt.y);
+          ctx.arc(pt.x, pt.y, nw, 0, 2 * Math.PI);
+          ctx.save();
+          ctx.globalCompositeOperation = "destination-out";
+          ctx.fill();
+          ctx.restore();
+          ctx.stroke();
+
+          // Inner circle
+          ctx.save();
+          var rr = nw * 2 / 3;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(pt.x + rr, pt.y);
+          ctx.arc(pt.x, pt.y, rr, 0, 2 * Math.PI);
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        ctx.restore();
+      },
+
+      redraw: function() {
+        ctx.save();
+
+        if (imageStore.background) {
+          fillBox(ctx, imageStore.background);
+        } else {
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        var octx = offScreenCanvas.getContext("2d");
+        octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
+        that.drawOverlay(octx);
+        ctx.drawImage(offScreenCanvas, 0, 0);
 
         ctx.restore();
       },
@@ -205,6 +180,11 @@ $(function() {
     cvs.height = $(window)
       .height();
     ps.screenSize(cvs.width, cvs.height);
+
+    // Create offscreen canvas
+    offScreenCanvas = document.createElement("canvas");
+    offScreenCanvas.width = cvs.width;
+    offScreenCanvas.height = cvs.height;
   }
 
   $("#advent")
