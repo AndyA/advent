@@ -149,15 +149,25 @@ $(function() {
       redraw: function() {
         ctx.save();
 
-        if (imageStore.background) {
-          fillBox(ctx, imageStore.background);
+
+        if (0) {
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else {
+          if (imageStore.background) {
+            fillBox(ctx, imageStore.background);
+          } else {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
+
+          snowStorm.redraw(ctx);
         }
 
-        snowStorm.redraw(ctx);
-
         ps.eachEdge(function(edge, pt1, pt2) {
-          ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
-          ctx.lineWidth = 5;
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+          ctx.lineWidth = 3;
+          ctx.setLineDash([8, 8]);
           ctx.beginPath();
           ctx.moveTo(pt1.x, pt1.y);
           ctx.lineTo(pt2.x, pt2.y);
@@ -189,11 +199,12 @@ $(function() {
     return that
   }
 
-  function resize(cvs) {
+  function resize(cvs, ps) {
     cvs.width = $(window)
       .width();
     cvs.height = $(window)
       .height();
+    ps.screenSize(cvs.width, cvs.height);
   }
 
   $("#advent")
@@ -216,17 +227,6 @@ $(function() {
           });
       });
 
-      $(window)
-        .mousemove(function(ev) {
-          var xp = (ev.pageX / cvs.width) - 0.5;
-          snowStorm.setDrift(xp);
-        })
-        .resize(function() {
-          resize(cvs);
-        });
-
-      resize(cvs);
-
       var ps = arbor.ParticleSystem(1000, 400, 1);
       ps.parameters({
         gravity: true
@@ -234,6 +234,17 @@ $(function() {
       ps.renderer = Renderer(cvs, function(hit) {
         console.log("hit: ", hit);
       });
+
+      $(window)
+        .mousemove(function(ev) {
+          var xp = (ev.pageX / cvs.width) - 0.5;
+          snowStorm.setDrift(xp);
+        })
+        .resize(function() {
+          resize(cvs, ps);
+        });
+
+      resize(cvs, ps);
 
       var data = randomParticles(24, 30);
       console.log("data: ", data);
