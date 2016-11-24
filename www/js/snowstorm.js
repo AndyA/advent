@@ -14,7 +14,7 @@ $.extend(SnowStorm.prototype, {
       x: Math.random(),
       y: 0,
       v: (1 + Math.random()) / 200,
-      r: Math.random() * Math.random() * 4 + 2
+      r: Math.random() * Math.random() * 2 + 2
     };
   },
 
