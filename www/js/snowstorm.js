@@ -23,9 +23,9 @@ $.extend(SnowStorm.prototype, {
 
     for (var i = 0; i < this.flakes.length; i++) {
       var flake = this.flakes[i];
-      flake.y += flake.v;
+      flake.y += flake.v / flake.r;
       if (flake.y >= 1.0) continue;
-      flake.x += this.drift / 100;
+      flake.x += this.drift / 20 / flake.r;
       if (flake.x < 0)
         flake.x += 1.0;
       if (flake.x > 1.0)
