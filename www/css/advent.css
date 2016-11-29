@@ -8,6 +8,18 @@ body {
   cursor: pointer;
 }
 
+#logo {
+  left: 15vmin;
+  position: fixed;
+  top: 15vmin;
+  width: 15vmin;
+  z-index: 4000;
+}
+
+#logo img {
+	max-width: 100%;
+}
+
 #popup {
   position: fixed;
   top: 0;
@@ -26,11 +38,17 @@ body {
 }
 
 #popup .today {
-	margin: 2% 5% 5%; 
-	background: rgba(256, 256, 256, 0.6);
-	padding: 2% 5% 5%;
-	position: relative;
-	border-radius: 20px;
+  background: rgba(255, 255, 255, 0.6) none repeat scroll 0 0;
+  border-radius: 20px;
+  position: absolute;
+	top: 12vmin;
+	right: 12vmin;
+	bottom: 12vmin;
+	left: 12vmin;
+}
+
+@media only screen and (max-width: 750px) {
+	
 }
 
 #popup .close {
@@ -44,19 +62,37 @@ body {
 
 #popup .header, #popup .body {
     display: block;
-    margin: 1em 0 0;
+    padding-left: 6vmin;
+}
+
+#popup .header {
+	margin-top: 7vmin;
 }
 
 #popup .body {
-    margin: 0 0 0 15vmin;
+    margin: 0 0 0 12vmin;
 }
 
 a {
 	color: #000;
 }
 
-h1.date, h1.title {
-	margin: 0 0 0.5em 15vmin;
+h1.title, #popup .body {
+	margin-left: 17vmin;
+}
+
+
+@media only screen and (max-aspect-ratio: 1/1) {
+	h1.title {
+    margin: 20vmin 3vmin 2vmin;
+	}
+	#popup .body {
+    margin: 2vmin 3vmin;
+	}
+	
+	#popup .header, #popup .body {
+	padding-left: 0;
+	}
 }
 
 
@@ -64,21 +100,42 @@ h1.date {
   background: #fff none repeat scroll 0 0;
   border: 4px dotted #a1a3a6;
   border-radius: 50%;
-  color: #000;
-  font-size: 40px;
   height: 10vmin;
-  left: 2em;
-  line-height: 10vmin;
-  margin: 0 0.25em 0 0;
-  padding: 0.25em;
+  left: 50%;
+  margin: 0;
+  padding: 0.15em;
   position: absolute;
   text-align: center;
-  top: 35px;
+  top: -6vmin;
   width: 10vmin;
 }
 
+@media only screen and (max-width: 750px) {
+	h1.date {
+  left: 40%;
+	}
+}
+		
+
+h1.date {
+    color: #000;
+    line-height: 2.75vmin;
+}
+
+h1.date .day-num {
+    display: block;
+    font-size: 3.5vmin;
+    padding: 0.45em 0 0;
+}
+
+h1.date .month {
+	font-size: 1.75vmin;
+
+}
+
 h1.title {
-    font-size: 50px;
+    font-size: 4.5vmin;
+		font-weight: normal;
 }
 
 h1 a {
@@ -90,32 +147,69 @@ h1 a {
 }
 
 #popup .day-image {
-	width: 60%;
-	text-align: center;
+  margin-bottom: 2vmin;
+  width: 45%;
+  text-align: center;
+	margin-right: 4vmin;
+	background-color: rgba(0, 0, 0, 0.05);
 }
 
 #popup .synopsis {
-    font-size: 1.4em;
-    margin: 0 0 0 2%;
-    padding: 0;
-    width: 35%;
+  margin: 0;
+  width: 45%;
+  padding: 0;
+}
+
+@media only screen and (max-aspect-ratio: 1/1) {
+	#popup .day-image, #popup .synopsis {
+  width: 100%;
+	}
 }
 
 #popup .day-image img {
-	max-width: 100%;
-	max-height: 60vh;
+  max-width: 100%;
+	max-height: 50vh;
 }
 
 #popup p.description {
 	margin-top: 0;
 }
 
-
-h1 {
-  font-size: 5.9vw;
-}
-
 p {
-  font-size: 2vmin;
+  font-size: 1.7vmin;
 }
-*/
+
+@media only screen and (max-width: 750px) {
+	p {
+  font-size: 2vmin;
+	}
+}
+
+
+a.button {
+	display: block;
+	text-decoration: none;
+	height: 10vmin;
+}
+
+a.button .fa {
+	color: #000;
+}
+
+a.button .fa.roll {
+	display: none;
+}
+
+a.button:hover .fa {
+	color: #fff;
+}
+
+a.button:hover .fa.roll {
+	color: #fff;
+	display: block;
+	font-size: 4em;
+	position: relative; 
+	left: 14vmin;
+	top: -4vmin;
+	opacity: 0.2;
+}

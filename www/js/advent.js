@@ -5,7 +5,9 @@ $(function() {
   var snowStorm = null;
   var snowFlake = null;
   var offScreenCanvas = null;
-  var currentDay = 1;
+
+  var currentDay = adventDate(new Date());
+
   var activeDay = -2;
 
   var images = {
@@ -13,6 +15,13 @@ $(function() {
   };
 
   var imageStore = {};
+
+  function adventDate(dt) {
+    var mo = dt.getMonth();
+    if (mo < 6) return 24;
+    if (mo < 11) return 0;
+    return Math.min(dt.getDate(), 24);
+  }
 
   function nth(x) {
     switch (Math.round(x % 20)) {
@@ -44,7 +53,7 @@ $(function() {
       $("#popup .view-media").hide();
     }
 
-    $("#popup .date").text(data.day + nth(data.day));
+    $("#popup .date .day-num").text(data.day + nth(data.day));
     $("#popup .title a").text(data.title);
     $("#popup .synopsis .description").text(data.synopsis);
 
@@ -91,21 +100,32 @@ $(function() {
     return "rgba(" + [].slice.call(arguments).join(", ") + ")";
   }
 
+  var snowStep;
+  var snowSteps;
+  var snowStartXC;
+  ;
+  var snowStartY;
+  var snowStartScale;
+  var snowEndScale;
+  var snowEndX;
+  var snowEndY;
+
+  function scaleSnow(width, height) {
+    snowStartX = width / 2;
+    snowStartY = height / 2;
+    snowStartScale = Math.min(snowStartX, snowStartY) * 3;
+    snowEndScale = (width + height) / 50;
+  }
+
   var Renderer = function(canvas, click) {
     var ctx = canvas.getContext("2d");
     var ps;
 
-    var snowStep = 0;
-    var snowSteps = currentDay * 10 + 20;
-    var snowStartX = canvas.width / 2;
-    var snowStartY = canvas.height / 2;
-    var snowStartScale = Math.min(snowStartX, snowStartY) * 3;
-    var snowEndScale = (canvas.width + canvas.height) / 50;
-    var snowEndX = null;
-    var snowEndY = null;
-
-    //    console.log("Current day: ", currentDay);
-    //    console.log(snowStartX, snowStartY, snowStartScale);
+    snowStep = 0;
+    snowSteps = currentDay * 10 + 20;
+    snowEndX = null;
+    snowEndY = null;
+    scaleSnow(canvas.width, canvas.height);
 
     var that = {
       init: function(system) {
@@ -213,11 +233,14 @@ $(function() {
         var octx = offScreenCanvas.getContext("2d");
         octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
         that.drawOverlay(octx);
-        that.drawGraph(octx, false);
-        that.drawGraph(octx, true);
+        if (currentDay > 0) {
+          that.drawGraph(octx, false);
+          that.drawGraph(octx, true);
+        }
+
         ctx.drawImage(offScreenCanvas, 0, 0);
 
-        if (snowFlake && activeDay >= 0 && snowEndX !== null) {
+        if (currentDay > 0 && snowFlake && activeDay >= 0 && snowEndX !== null) {
           ctx.save();
 
           var snowX = easer(snowStartX, snowEndX, snowSteps, snowStep);
@@ -248,18 +271,17 @@ $(function() {
               showPopup(hit.node.data);
             }
           }).mousemove(function(e) {
-            var pos = $(this)
-              .offset();
-            var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-            var hit = ps.nearest(mp);
-            if (hit) click(hit);
-            if (hit && hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
-              $(this).addClass("clicky");
-            }
-            else {
-              $(this).removeClass("clicky");
-            }
-          });
+          var pos = $(this)
+            .offset();
+          var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+          var hit = ps.nearest(mp);
+          if (hit) click(hit);
+          if (hit && hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
+            $(this).addClass("clicky");
+          } else {
+            $(this).removeClass("clicky");
+          }
+        });
       },
 
     }
@@ -278,6 +300,7 @@ $(function() {
     offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = cvs.width;
     offScreenCanvas.height = cvs.height;
+    scaleSnow(cvs.width, cvs.height);
   }
 
   query = getQuery();
@@ -288,7 +311,7 @@ $(function() {
     if (event.which == 27) hidePopup();
   });
 
-  $("#popup .close").click(function(ev) {
+  $("#popup").click(function(ev) {
     hidePopup()
   });
 
