@@ -14,17 +14,33 @@ $(function() {
 
   var imageStore = {};
 
+  function nth(x) {
+    switch (Math.round(x % 20)) {
+      default:
+        return "th";
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+    }
+  }
+
+  function easer(from, to, steps, step) {
+    if (step >= steps) return to;
+    var inc = Math.pow(to / from, 1 / steps);
+    return from * Math.pow(inc, step);
+  }
+
   function showPopup(data) {
-    console.log("popup: ", data);
-
-
     $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
       href: data.url
     });
 
-    $("#popup .date").text(data.day);
+    $("#popup .date").text(data.day + nth(data.day));
     $("#popup .title a").text(data.title);
-    $("#popup .synopsis .content p").text(data.synopsis);
+    $("#popup .synopsis .description").text(data.synopsis);
 
     $("#popup .day-image img").attr({
       src: data.image_url,
@@ -72,6 +88,18 @@ $(function() {
   var Renderer = function(canvas, click) {
     var ctx = canvas.getContext("2d");
     var ps;
+
+    var snowStep = 0;
+    var snowSteps = currentDay * 10 + 20;
+    var snowStartX = canvas.width / 2;
+    var snowStartY = canvas.height / 2;
+    var snowStartScale = Math.min(snowStartX, snowStartY) * 3;
+    var snowEndScale = (canvas.width + canvas.height) / 50;
+    var snowEndX = null;
+    var snowEndY = null;
+
+    //    console.log("Current day: ", currentDay);
+    //    console.log(snowStartX, snowStartY, snowStartScale);
 
     var that = {
       init: function(system) {
@@ -132,7 +160,7 @@ $(function() {
           ctx.stroke();
 
           // Inner circle
-          if (inPast) {
+          if (age >= 1) {
             ctx.save();
             var rr = nw * 2 / 3;
             ctx.setLineDash([3, 3]);
@@ -141,6 +169,12 @@ $(function() {
             ctx.arc(pt.x, pt.y, rr, 0, 2 * Math.PI);
             ctx.stroke();
             ctx.restore();
+
+          }
+
+          if (node.data.day == currentDay) {
+            snowEndX = pt.x;
+            snowEndY = pt.y;
           }
         });
 
@@ -176,9 +210,21 @@ $(function() {
         that.drawGraph(octx, false);
         that.drawGraph(octx, true);
         ctx.drawImage(offScreenCanvas, 0, 0);
-        if (0 && snowFlake) {
+
+        if (snowFlake && activeDay >= 0 && snowEndX !== null) {
+          ctx.save();
+
+          var snowX = easer(snowStartX, snowEndX, snowSteps, snowStep);
+          var snowY = easer(snowStartY, snowEndY, snowSteps, snowStep);
+          var snowScale = easer(snowStartScale, snowEndScale, snowSteps, snowStep);
+          ctx.strokeStyle = rgba(255, 255, 255, easer(0.01, 1, snowSteps, snowStep));
+
+          ctx.translate(snowX, snowY);
+          ctx.scale(snowScale, snowScale);
           snowFlake.render(ctx);
+          ctx.restore();
           snowFlake.spinBy(0.01);
+          snowStep++;
         }
 
         ctx.restore();
@@ -217,17 +263,12 @@ $(function() {
   if (query.day !== undefined)
     currentDay = Math.max(1, Math.min(parseInt(query.day), 24));
 
-  $("#date-slider").slider({
-    value: currentDay,
-    min: 1,
-    max: 24,
-    slide: function(ev, ui) {
-      currentDay = ui.value;
-    },
-  });
-
   $(document).on('keypress', function(event) {
     if (event.which == 27) hidePopup();
+  });
+
+  $("#popup .close").click(function(ev) {
+    hidePopup()
   });
 
   $("#advent")
@@ -252,17 +293,6 @@ $(function() {
           });
       });
 
-      var ps = arbor.ParticleSystem(1000, 400, 1);
-      ps.parameters({
-        gravity: true
-      });
-      ps.renderer = Renderer(cvs, function(hit) {
-        //        console.log("hit: ", hit);
-        if (hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
-          showPopup(hit.node.data);
-        }
-      });
-
       $(window)
         .mousemove(function(ev) {
           var xp = (ev.pageX / cvs.width) - 0.5;
@@ -272,7 +302,19 @@ $(function() {
           resize(cvs, ps);
         });
 
+      var ps = arbor.ParticleSystem(1000, 400, 1);
+
       resize(cvs, ps);
+
+      ps.parameters({
+        gravity: true
+      });
+
+      ps.renderer = Renderer(cvs, function(hit) {
+        if (hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
+          showPopup(hit.node.data);
+        }
+      });
 
       $.get("/data.json").then(function(data) {
         console.log("Data loaded", data);

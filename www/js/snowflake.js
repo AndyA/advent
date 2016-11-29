@@ -55,9 +55,7 @@ $.extend(SnowFlake.prototype, (function() {
     renderBranch: function(ctx, branch) {
       ctx.save();
 
-      ctx.lineWidth = branch.length / 300;
-      var alpha = 1;
-      ctx.strokeStyle = rgba(255, 255, 255, alpha);
+      ctx.lineWidth = branch.length / 30;
 
       ctx.beginPath();
       ctx.moveTo(0, 0);
@@ -91,9 +89,6 @@ $.extend(SnowFlake.prototype, (function() {
       // Render the snowflake
       ctx.save();
       ctx.lineCap = "round";
-      ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
-      var scale = Math.min(ctx.canvas.width, ctx.canvas.height) / 4;
-      ctx.scale(scale, scale);
       ctx.rotate(this.rotate);
       var rep = this.opt.oneBranch ? 1 : 6;
       for (var i = 0; i < rep; i++) {
