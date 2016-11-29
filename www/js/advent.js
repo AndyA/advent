@@ -6,15 +6,38 @@ $(function() {
   var snowFlake = null;
   var offScreenCanvas = null;
   var currentDay = 1;
-  var activeDay = 1;
+  var activeDay = -2;
 
   var images = {
     background: "i/background.jpg",
-    redball: "i/red-ball.png",
-    greenball: "i/green-ball.png",
   };
 
   var imageStore = {};
+
+  function showPopup(data) {
+    console.log("popup: ", data);
+
+
+    $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
+      href: data.url
+    });
+
+    $("#popup .date").text(data.day);
+    $("#popup .title a").text(data.title);
+    $("#popup .synopsis .content p").text(data.synopsis);
+
+    $("#popup .day-image img").attr({
+      src: data.image_url,
+      alt: data.title,
+      title: data.title
+    });
+
+    $("#popup").show();
+  }
+
+  function hidePopup() {
+    $("#popup").hide();
+  }
 
   function getQuery() {
     var query = window.location.search.substring(1);
@@ -25,56 +48,6 @@ $(function() {
       query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
     }
     return query;
-  }
-
-  function randomParticles(nodeCount, edgeCount) {
-    var nodes = {};
-    var edges = [];
-
-    for (var n = 0; n < nodeCount; n++) {
-      var name = "day" + (n + 1);
-      nodes[name] = {
-        day: (n + 1),
-        r: 20 + Math.random() * 30
-      };
-    }
-
-    if (1) {
-      for (var n = 0; n < nodeCount - 1; n++) {
-        var nm1 = "day" + (n + 1);
-        var nm2 = "day" + (n + 2);
-        edges.push({
-          link: [nm1, nm2],
-          length: Math.random() * 10 + 10
-        });
-      }
-    } else {
-      for (var e = 0; e < edgeCount; e++) {
-        var nd1 = Math.floor(Math.random() * nodeCount);
-        var nd2 = Math.floor(Math.random() * nodeCount);
-        if (nd1 == nd2) continue;
-        var nm1 = "day" + (nd1 + 1);
-        var nm2 = "day" + (nd2 + 1);
-        edges.push({
-          link: [nm1, nm2],
-          length: Math.random() * 10 + 10
-        });
-      }
-    }
-
-    return {
-      nodes: nodes,
-      edges: edges
-    };
-  }
-
-  function initParticles(ps, data) {
-    $.each(data.nodes, function(name, d) {
-      ps.addNode(name, d);
-    });
-    $.each(data.edges, function(idx, d) {
-      ps.addEdge(d.link[0], d.link[1], d);
-    });
   }
 
   function fillBox(ctx, img) {
@@ -92,14 +65,6 @@ $(function() {
     }
   }
 
-  function scaleVector(dx, dy, len) {
-    var curLen = Math.sqrt(dx * dx + dy * dy);
-    return {
-      dx: dx * len / curLen,
-      dy: dy * len / curLen
-    };
-  }
-
   function rgba(r, g, b, a) {
     return "rgba(" + [].slice.call(arguments).join(", ") + ")";
   }
@@ -112,7 +77,7 @@ $(function() {
       init: function(system) {
         ps = system;
         ps.screenSize(canvas.width, canvas.height);
-        ps.screenPadding(100);
+        ps.screenPadding(canvas.height / 10, canvas.width / 10);
         that.initMouseHandling();
       },
 
@@ -153,6 +118,7 @@ $(function() {
           if (past != inPast) return;
 
           var nw = age >= 0 ? radiusPast / (1 + Math.sqrt(age / 3)) : radiusFuture;
+          node.data.radius = nw; // cached for later
           ctx.strokeStyle = rgba(255, 255, 255, inPast ? alphaPast : alphaFuture);
 
           // Outer circle
@@ -239,6 +205,7 @@ $(function() {
     cvs.height = $(window)
       .height();
     ps.screenSize(cvs.width, cvs.height);
+    ps.screenPadding(cvs.height / 10, cvs.width / 10);
 
     // Create offscreen canvas
     offScreenCanvas = document.createElement("canvas");
@@ -257,6 +224,10 @@ $(function() {
     slide: function(ev, ui) {
       currentDay = ui.value;
     },
+  });
+
+  $(document).on('keypress', function(event) {
+    if (event.which == 27) hidePopup();
   });
 
   $("#advent")
@@ -286,7 +257,10 @@ $(function() {
         gravity: true
       });
       ps.renderer = Renderer(cvs, function(hit) {
-        console.log("hit: ", hit);
+        //        console.log("hit: ", hit);
+        if (hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
+          showPopup(hit.node.data);
+        }
       });
 
       $(window)
@@ -300,9 +274,22 @@ $(function() {
 
       resize(cvs, ps);
 
-      var data = randomParticles(24, 30);
-      console.log("data: ", data);
-      initParticles(ps, data);
+      $.get("/data.json").then(function(data) {
+        console.log("Data loaded", data);
+        for (var i = 0; i < data.length; i++) {
+          var info = data[i];
+          info.day = i + 1;
+          ps.addNode("day" + info.day, info);
+        }
+        var len = 1;
+        for (var i = 1; i < data.length; i++) {
+          ps.addEdge("day" + i, "day" + (i + 1), {
+            length: len
+          });
+          len *= 1.1;
+        }
+      }).fail(function(err) {});
+
       ps.fps(25);
 
     });
