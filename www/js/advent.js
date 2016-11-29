@@ -34,9 +34,15 @@ $(function() {
   }
 
   function showPopup(data) {
-    $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
-      href: data.url
-    });
+    if (data.url) {
+      $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
+        href: data.url
+      });
+      $("#popup .view-media").show();
+    } else {
+      $("#popup .day-image a, #popup .view-media a, #popup .title a").removeAttr("href");
+      $("#popup .view-media").hide();
+    }
 
     $("#popup .date").text(data.day + nth(data.day));
     $("#popup .title a").text(data.title);
@@ -238,6 +244,21 @@ $(function() {
             var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
             var hit = ps.nearest(mp);
             if (hit) click(hit);
+            if (hit && hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
+              showPopup(hit.node.data);
+            }
+          }).mousemove(function(e) {
+            var pos = $(this)
+              .offset();
+            var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+            var hit = ps.nearest(mp);
+            if (hit) click(hit);
+            if (hit && hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
+              $(this).addClass("clicky");
+            }
+            else {
+              $(this).removeClass("clicky");
+            }
           });
       },
 
@@ -310,11 +331,7 @@ $(function() {
         gravity: true
       });
 
-      ps.renderer = Renderer(cvs, function(hit) {
-        if (hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
-          showPopup(hit.node.data);
-        }
-      });
+      ps.renderer = Renderer(cvs, function(hit) {});
 
       $.get("/data.json").then(function(data) {
         console.log("Data loaded", data);

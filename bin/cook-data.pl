@@ -30,12 +30,12 @@ my %image = map { lc $_->basename => $_ } dir($images_dir)->children;
 
 my @output = ();
 for my $dn ( 0 .. $#$days ) {
-  my $day = $days->[$dn];
+  my $day  = $days->[$dn];
   my $date = $dn + 1;
-  my $rec = {};
+  my $rec  = {};
   $rec->{title}     = $day->{title};
   $rec->{synopsis}  = fix_links( $day->{synopsis}, \%LINKS );
-  $rec->{url}       = $day->{url};
+  $rec->{url}       = $day->{url} unless $day->{url} =~ /^\s*$/;
   $rec->{image_url} = "/i/day${date}.jpg";
   push @output, $rec;
 }
