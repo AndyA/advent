@@ -55,9 +55,7 @@ $.extend(SnowFlake.prototype, (function() {
     renderBranch: function(ctx, branch) {
       ctx.save();
 
-      //      ctx.lineWidth = 0.01;
       ctx.lineWidth = branch.length / 300;
-//      var alpha = 1 - 0.5 / branch.depth;
       var alpha = 1;
       ctx.strokeStyle = rgba(255, 255, 255, alpha);
 
