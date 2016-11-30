@@ -1,7 +1,17 @@
+html { 
+	
+}
+
 body {
-	font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
+}
+
+#advent {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 #advent.clicky {
@@ -9,24 +19,22 @@ body {
 }
 
 #logo {
-  left: 15vmin;
-  position: fixed;
-  top: 15vmin;
+  left: 10vmin;
+  position: absolute;
+  top: 14vmin;
   width: 15vmin;
   z-index: 4000;
 }
 
 #logo img {
-	max-width: 100%;
+  max-width: 100%;
 }
 
 #popup {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   z-index: 2000;
   display: none;
 }
@@ -38,120 +46,107 @@ body {
 }
 
 #popup .today {
-  background: rgba(255, 255, 255, 0.6) none repeat scroll 0 0;
+  background: rgba(185, 185, 185, 0.9);
   border-radius: 20px;
-  position: absolute;
-	top: 12vmin;
-	right: 12vmin;
-	bottom: 12vmin;
-	left: 12vmin;
-}
-
-@media only screen and (max-width: 750px) {
-	
+  margin: 10vmin 6vmin 6vmin;
+	position: relative;
 }
 
 #popup .close {
-	position: absolute;
+  position: absolute;
   top: 15px;
   right: 25px;
-	font-size: 2em;
-	cursor: pointer;
-	color: #fff;
+  cursor: pointer;
+  color: #fff;
+	font-size: 1.5em;
 }
 
 #popup .header, #popup .body {
-    display: block;
-    padding-left: 6vmin;
+  display: block;
 }
 
 #popup .header {
-	margin-top: 7vmin;
+  padding-top: 5.5vmin;
 }
 
 #popup .body {
-    margin: 0 0 0 12vmin;
+	margin-bottom: 3vmin;
 }
 
 a {
-	color: #000;
+  color: #000;
 }
 
 h1.title, #popup .body {
-	margin-left: 17vmin;
+  margin-left: 28vmin;
+}
+
+@media only screen and (max-aspect-ratio: 3/2) {
+  #popup .body {
+  margin: 2vmin 3vmin;
+  }
+  
+  #popup .header, #popup .body {
+  padding-left: 0;
+  }
 }
 
 
-@media only screen and (max-aspect-ratio: 1/1) {
-	h1.title {
-    margin: 20vmin 3vmin 2vmin;
-	}
-	#popup .body {
-    margin: 2vmin 3vmin;
-	}
-	
-	#popup .header, #popup .body {
-	padding-left: 0;
-	}
-}
-
-
-h1.date {
+h2.date {
   background: #fff none repeat scroll 0 0;
+	color: #000;
   border: 4px dotted #a1a3a6;
   border-radius: 50%;
   height: 10vmin;
-  left: 50%;
-  margin: 0;
-  padding: 0.15em;
+  left: 48%;
+	margin: 0;
+  padding:  0.25em;
   position: absolute;
   text-align: center;
   top: -6vmin;
   width: 10vmin;
+	line-height: 3.2vmin;
+	font-weight: normal;
 }
 
-@media only screen and (max-width: 750px) {
-	h1.date {
-  left: 40%;
-	}
-}
-		
-
-h1.date {
-    color: #000;
-    line-height: 2.75vmin;
+h2.date .day-num {
+  display: block;
+	padding: 1.8vmin 0 0.5vmin;
+	font-size: 4vmin;
 }
 
-h1.date .day-num {
-    display: block;
-    font-size: 3.5vmin;
-    padding: 0.45em 0 0;
-}
-
-h1.date .month {
-	font-size: 1.75vmin;
-
+h2.date .month {
+	font-size: 2.5vmin;
 }
 
 h1.title {
-    font-size: 4.5vmin;
-		font-weight: normal;
+  font-weight: normal;
 }
 
 h1 a {
-	text-decoration: none;
+  text-decoration: none;
+}
+
+@media only screen and (max-aspect-ratio: 1/1) {
+	h2.date {
+  left: 42%;
+	}
+	
+	h1.title {
+	margin: 14vmin 3vmin 2vmin;;
+  }
 }
 
 #popup .day-image, #popup .synopsis {
-	float: left;
+  float: left;
 }
 
 #popup .day-image {
   margin-bottom: 2vmin;
   width: 45%;
   text-align: center;
-	margin-right: 4vmin;
-	background-color: rgba(0, 0, 0, 0.05);
+  margin-right: 4vmin;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 #popup .synopsis {
@@ -160,56 +155,46 @@ h1 a {
   padding: 0;
 }
 
-@media only screen and (max-aspect-ratio: 1/1) {
-	#popup .day-image, #popup .synopsis {
-  width: 100%;
-	}
+@media only screen and (max-aspect-ratio: 3/2) {
+  #popup .day-image, #popup .synopsis {
+    width: 100%;
+  }
 }
 
 #popup .day-image img {
   max-width: 100%;
-	max-height: 50vh;
+  max-height: 50vh;
 }
 
 #popup p.description {
-	margin-top: 0;
+  margin-top: 0;
 }
 
-p {
-  font-size: 1.7vmin;
-}
-
-@media only screen and (max-width: 750px) {
-	p {
-  font-size: 2vmin;
+@media only screen and (max-aspect-ratio: 1/1) {
+		
+	h2.date .day-num {
+  padding: 0.45em 0 0;
+	}
+		
+	#popup .close {
+	right: 20px;
+  top: 10px;
+	}
+	
+	h1.title {
+    margin: 14vmin 3vmin 0;
 	}
 }
 
-
 a.button {
-	display: block;
-	text-decoration: none;
-	height: 10vmin;
+  display: block;
+  text-decoration: none;
 }
 
 a.button .fa {
-	color: #000;
-}
-
-a.button .fa.roll {
-	display: none;
+  color: #000;
 }
 
 a.button:hover .fa {
-	color: #fff;
-}
-
-a.button:hover .fa.roll {
-	color: #fff;
-	display: block;
-	font-size: 4em;
-	position: relative; 
-	left: 14vmin;
-	top: -4vmin;
-	opacity: 0.2;
+  opacity: 0.5;
 }
