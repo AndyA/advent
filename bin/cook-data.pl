@@ -36,7 +36,7 @@ for my $dn ( 0 .. $#$days ) {
   $rec->{title}     = $day->{title};
   $rec->{synopsis}  = fix_links( $day->{synopsis}, \%LINKS );
   $rec->{url}       = $day->{url} unless $day->{url} =~ /^\s*$/;
-  $rec->{image_url} = "/i/day${date}.jpg";
+  $rec->{image_url} = "i/day${date}.jpg";
   push @output, $rec;
 }
 
