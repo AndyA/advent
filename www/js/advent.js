@@ -1,6 +1,4 @@
 $(function() {
-
-  var bgImageURL = "i/background.jpg";
   var bgImage = null;
   var snowStorm = null;
   var snowFlake = null;
