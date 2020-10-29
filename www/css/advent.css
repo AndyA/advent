@@ -1,9 +1,8 @@
-html { 
-	
+html {
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -49,7 +48,7 @@ body {
   background: rgba(185, 185, 185, 0.9);
   border-radius: 20px;
   margin: 10vmin 6vmin 6vmin;
-	position: relative;
+  position: relative;
 }
 
 #popup .close {
@@ -58,10 +57,11 @@ body {
   right: 25px;
   cursor: pointer;
   color: #fff;
-	font-size: 1.5em;
+  font-size: 1.5em;
 }
 
-#popup .header, #popup .body {
+#popup .header,
+#popup .body {
   display: block;
 }
 
@@ -70,53 +70,54 @@ body {
 }
 
 #popup .body {
-	margin-bottom: 3vmin;
+  margin-bottom: 3vmin;
 }
 
 a {
   color: #000;
 }
 
-h1.title, #popup .body {
+h1.title,
+#popup .body {
   margin-left: 28vmin;
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {
   #popup .body {
-  margin: 2vmin 3vmin;
+    margin: 2vmin 3vmin;
   }
-  
-  #popup .header, #popup .body {
-  padding-left: 0;
+
+  #popup .header,
+  #popup .body {
+    padding-left: 0;
   }
 }
 
-
 h2.date {
   background: #fff none repeat scroll 0 0;
-	color: #000;
+  color: #000;
   border: 4px dotted #a1a3a6;
   border-radius: 50%;
   height: 10vmin;
   left: 48%;
-	margin: 0;
-  padding:  0.25em;
+  margin: 0;
+  padding: 0.25em;
   position: absolute;
   text-align: center;
   top: -6vmin;
   width: 10vmin;
-	line-height: 3.2vmin;
-	font-weight: normal;
+  line-height: 3.2vmin;
+  font-weight: normal;
 }
 
 h2.date .day-num {
   display: block;
-	padding: 1.8vmin 0 0.5vmin;
-	font-size: 4vmin;
+  padding: 1.8vmin 0 0.5vmin;
+  font-size: 4vmin;
 }
 
 h2.date .month {
-	font-size: 2.5vmin;
+  font-size: 2.5vmin;
 }
 
 h1.title {
@@ -128,16 +129,17 @@ h1 a {
 }
 
 @media only screen and (max-aspect-ratio: 1/1) {
-	h2.date {
-  left: 42%;
-	}
-	
-	h1.title {
-	margin: 14vmin 3vmin 2vmin;;
+  h2.date {
+    left: 42%;
+  }
+
+  h1.title {
+    margin: 14vmin 3vmin 2vmin;
   }
 }
 
-#popup .day-image, #popup .synopsis {
+#popup .day-image,
+#popup .synopsis {
   float: left;
 }
 
@@ -156,7 +158,8 @@ h1 a {
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {
-  #popup .day-image, #popup .synopsis {
+  #popup .day-image,
+  #popup .synopsis {
     width: 100%;
   }
 }
@@ -171,19 +174,18 @@ h1 a {
 }
 
 @media only screen and (max-aspect-ratio: 1/1) {
-		
-	h2.date .day-num {
-  padding: 0.45em 0 0;
-	}
-		
-	#popup .close {
-	right: 20px;
-  top: 10px;
-	}
-	
-	h1.title {
+  h2.date .day-num {
+    padding: 0.45em 0 0;
+  }
+
+  #popup .close {
+    right: 20px;
+    top: 10px;
+  }
+
+  h1.title {
     margin: 14vmin 3vmin 0;
-	}
+  }
 }
 
 a.button {
