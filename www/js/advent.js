@@ -1,6 +1,4 @@
 $(function() {
-
-  var bgImageURL = "i/background.jpg";
   var bgImage = null;
   var snowStorm = null;
   var snowFlake = null;
@@ -9,10 +7,6 @@ $(function() {
   var currentDay = adventDate(new Date());
 
   var activeDay = -2;
-
-  var images = {
-    background: "i/background.jpg",
-  };
 
   var imageStore = {};
 
@@ -49,7 +43,9 @@ $(function() {
       });
       $("#popup .view-media").show();
     } else {
-      $("#popup .day-image a, #popup .view-media a, #popup .title a").removeAttr("href");
+      $(
+        "#popup .day-image a, #popup .view-media a, #popup .title a"
+      ).removeAttr("href");
       $("#popup .view-media").hide();
     }
 
@@ -72,10 +68,10 @@ $(function() {
 
   function getQuery() {
     var query = window.location.search.substring(1);
-    var vars = query.split('&');
+    var vars = query.split("&");
     var query = {};
     for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split('=');
+      var pair = vars[i].split("=");
       query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
     }
     return query;
@@ -103,7 +99,6 @@ $(function() {
   var snowStep;
   var snowSteps;
   var snowStartXC;
-  ;
   var snowStartY;
   var snowStartScale;
   var snowEndScale;
@@ -150,7 +145,12 @@ $(function() {
           var inPast = edgeDay <= activeDay;
           if (past !== inPast) return;
 
-          ctx.strokeStyle = rgba(255, 255, 255, inPast ? alphaPast : alphaFuture);
+          ctx.strokeStyle = rgba(
+            255,
+            255,
+            255,
+            inPast ? alphaPast : alphaFuture
+          );
 
           var dx = pt2.x - pt1.x;
           var dy = pt2.y - pt1.y;
@@ -159,7 +159,7 @@ $(function() {
           ctx.moveTo(pt1.x, pt1.y);
           ctx.lineTo(pt2.x, pt2.y);
           ctx.stroke();
-        })
+        });
 
         ctx.restore();
 
@@ -171,9 +171,15 @@ $(function() {
           var inPast = age >= 0;
           if (past != inPast) return;
 
-          var nw = age >= 0 ? radiusPast / (1 + Math.sqrt(age / 3)) : radiusFuture;
+          var nw =
+            age >= 0 ? radiusPast / (1 + Math.sqrt(age / 3)) : radiusFuture;
           node.data.radius = nw; // cached for later
-          ctx.strokeStyle = rgba(255, 255, 255, inPast ? alphaPast : alphaFuture);
+          ctx.strokeStyle = rgba(
+            255,
+            255,
+            255,
+            inPast ? alphaPast : alphaFuture
+          );
 
           // Outer circle
           ctx.beginPath();
@@ -188,14 +194,13 @@ $(function() {
           // Inner circle
           if (age >= 1) {
             ctx.save();
-            var rr = nw * 2 / 3;
+            var rr = (nw * 2) / 3;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
             ctx.moveTo(pt.x + rr, pt.y);
             ctx.arc(pt.x, pt.y, rr, 0, 2 * Math.PI);
             ctx.stroke();
             ctx.restore();
-
           }
 
           if (node.data.day == currentDay) {
@@ -218,10 +223,8 @@ $(function() {
 
         if (Math.abs(currentDay - activeDay) < 0.1) {
           activeDay = currentDay;
-        } else if (activeDay < currentDay)
-          activeDay += 0.1;
-        else if (activeDay > currentDay)
-          activeDay -= 0.1;
+        } else if (activeDay < currentDay) activeDay += 0.1;
+        else if (activeDay > currentDay) activeDay -= 0.1;
 
         if (imageStore.background) {
           fillBox(ctx, imageStore.background);
@@ -240,13 +243,28 @@ $(function() {
 
         ctx.drawImage(offScreenCanvas, 0, 0);
 
-        if (currentDay > 0 && snowFlake && activeDay >= 0 && snowEndX !== null) {
+        if (
+          currentDay > 0 &&
+          snowFlake &&
+          activeDay >= 0 &&
+          snowEndX !== null
+        ) {
           ctx.save();
 
           var snowX = easer(snowStartX, snowEndX, snowSteps, snowStep);
           var snowY = easer(snowStartY, snowEndY, snowSteps, snowStep);
-          var snowScale = easer(snowStartScale, snowEndScale, snowSteps, snowStep);
-          ctx.strokeStyle = rgba(255, 255, 255, easer(0.01, 1, snowSteps, snowStep));
+          var snowScale = easer(
+            snowStartScale,
+            snowEndScale,
+            snowSteps,
+            snowStep
+          );
+          ctx.strokeStyle = rgba(
+            255,
+            255,
+            255,
+            easer(0.01, 1, snowSteps, snowStep)
+          );
 
           ctx.translate(snowX, snowY);
           ctx.scale(snowScale, snowScale);
@@ -262,37 +280,41 @@ $(function() {
       initMouseHandling: function() {
         $(canvas)
           .click(function(e) {
-            var pos = $(this)
-              .offset();
+            var pos = $(this).offset();
             var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
             var hit = ps.nearest(mp);
             if (hit) click(hit);
-            if (hit && hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
+            if (
+              hit &&
+              hit.distance <= hit.node.data.radius &&
+              hit.node.data.day <= activeDay
+            ) {
               showPopup(hit.node.data);
             }
-          }).mousemove(function(e) {
-          var pos = $(this)
-            .offset();
-          var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-          var hit = ps.nearest(mp);
-          if (hit) click(hit);
-          if (hit && hit.distance <= hit.node.data.radius && hit.node.data.day <= activeDay) {
-            $(this).addClass("clicky");
-          } else {
-            $(this).removeClass("clicky");
-          }
-        });
-      },
-
-    }
-    return that
-  }
+          })
+          .mousemove(function(e) {
+            var pos = $(this).offset();
+            var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+            var hit = ps.nearest(mp);
+            if (hit) click(hit);
+            if (
+              hit &&
+              hit.distance <= hit.node.data.radius &&
+              hit.node.data.day <= activeDay
+            ) {
+              $(this).addClass("clicky");
+            } else {
+              $(this).removeClass("clicky");
+            }
+          });
+      }
+    };
+    return that;
+  };
 
   function resize(cvs, ps) {
-    cvs.width = $(window)
-      .width();
-    cvs.height = $(window)
-      .height();
+    cvs.width = $(window).width();
+    cvs.height = $(window).height();
     ps.screenSize(cvs.width, cvs.height);
     ps.screenPadding(cvs.height / 10, cvs.width / 10);
 
@@ -307,56 +329,46 @@ $(function() {
   if (query.day !== undefined)
     currentDay = Math.max(1, Math.min(parseInt(query.day), 24));
 
-  $(document).on('keypress', function(event) {
+  $(document).on("keypress", function(event) {
     if (event.which == 27) hidePopup();
   });
 
   $("#popup").click(function(ev) {
-    hidePopup()
+    hidePopup();
   });
 
-  $("#advent")
-    .each(function() {
-      var cvs = this;
+  $("#advent").each(function() {
+    var cvs = this;
 
-      snowFlake = new SnowFlake();
+    snowFlake = new SnowFlake();
 
-      snowStorm = new SnowStorm({
-        flakes: 1000,
-        gravity: 1.01,
-        birthRate: 3
+    snowStorm = new SnowStorm({
+      flakes: 1000,
+      gravity: 1.01,
+      birthRate: 3
+    });
+
+    $(window)
+      .mousemove(function(ev) {
+        var xp = ev.pageX / cvs.width - 0.5;
+        snowStorm.setDrift(xp);
+      })
+      .resize(function() {
+        resize(cvs, ps);
       });
 
-      $.each(images, function(tag, url) {
-        var img = $("<img>")
-          .attr({
-            src: url
-          })
-          .load(function() {
-            imageStore[tag] = img[0];
-          });
-      });
+    var ps = arbor.ParticleSystem(1000, 400, 1);
 
-      $(window)
-        .mousemove(function(ev) {
-          var xp = (ev.pageX / cvs.width) - 0.5;
-          snowStorm.setDrift(xp);
-        })
-        .resize(function() {
-          resize(cvs, ps);
-        });
+    resize(cvs, ps);
 
-      var ps = arbor.ParticleSystem(1000, 400, 1);
+    ps.parameters({
+      gravity: true
+    });
 
-      resize(cvs, ps);
+    ps.renderer = Renderer(cvs, function(hit) {});
 
-      ps.parameters({
-        gravity: true
-      });
-
-      ps.renderer = Renderer(cvs, function(hit) {});
-
-      $.get("data.json").then(function(data) {
+    $.get("data.json")
+      .then(function(data) {
         console.log("Data loaded", data);
         for (var i = 0; i < data.length; i++) {
           var info = data[i];
@@ -370,9 +382,24 @@ $(function() {
           });
           len *= 1.1;
         }
-      }).fail(function(err) {});
 
-      ps.fps(25);
+        // Data loaded
+        var images = {
+          background: data[currentDay - 1].background_url || "i/vr-bg-dark.jpg"
+        };
 
-    });
+        $.each(images, function(tag, url) {
+          var img = $("<img>")
+            .attr({
+              src: url
+            })
+            .load(function() {
+              imageStore[tag] = img[0];
+            });
+        });
+      })
+      .fail(function(err) {});
+
+    ps.fps(25);
+  });
 });
