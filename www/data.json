@@ -4,12 +4,14 @@
     "synopsis": "Jigna talks about how flexible working gives her more time with her family.",
     "title": "Flexible Working at BBC D+E - Jiynga's story",
     "url": "https://www.bbc.com/backstage/design-engineering/flexible-working/jigna",
-    "background_url": "i/background.jpg"
+    "background_url": "i/vr-bg.jpg"
   },
   {
-    "image_url": "i/day2.jpg",
-    "synopsis": "On this day in 1697, St Paul's Cathedral, designed by Sir Christopher Wren, was consecrated for use, after being rebuilt following the Great Fire of London. This snowy scene is one of 1000s of BBC images available in RES.",
-    "title": "Snow in London – St Paul’s Cathedral"
+    "image_url": "i/test-day2.jpg",
+    "synopsis": "Product Managers define and develop strategies for the Products used by millions of people every day – including iPlayer, BBC News and Sport. They have three key responsibilities: assessing product opportunities, defining the product to be built, and communicating with stakeholders.",
+    "title": "Product Management",
+    "url": "https://www.bbc.com/backstage/design-engineering/professions/product-management",
+    "background_url": "i/test-bg-2.jpg"
   },
   {
     "image_url": "i/day3.jpg",

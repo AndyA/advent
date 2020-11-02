@@ -90,6 +90,10 @@ $(function() {
       var sc = cw / iw;
       ctx.drawImage(img, 0, (ih - ch / sc) / 2, iw, ch / sc, 0, 0, cw, ch);
     }
+
+    // translucent overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+    ctx.fillRect(0, 0, cw, ch);
   }
 
   function rgba(r, g, b, a) {
@@ -385,7 +389,7 @@ $(function() {
 
         // Data loaded
         var images = {
-          background: data[currentDay - 1].background_url || "i/vr-bg-dark.jpg"
+          background: data[currentDay - 1].background_url || "i/background.jpg"
         };
 
         $.each(images, function(tag, url) {
