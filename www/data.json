@@ -22,16 +22,16 @@
   {
     "image_url": "i/day5-emma-mouth.jpeg",
     "title": "Say aaarrrrghghghg",
-    "background_url": "i/bg-day5-ruskin-valley.jpeg"
+    "background_url": "i/bg-day5.jpeg"
   },
   {
     "image_url": "i/day6-olly-armchair.jpeg",
     "title": "Sittin on the dock of the bay",
-    "background_url": "i/bg-day6-garden.jpg"
+    "background_url": "i/bg-day6-pizzo-round.jpeg"
   },
   {
     "image_url": "i/day7-got.jpeg",
-    "title": "\"I don’t plan on knitting by the fire while men fight for me. I might be small, Lord Glover, and I might be a girl, but I am every bit as much a Northerner as you… and I don’t need your permission to defend the North.\"",
+    "title": "\"I might be small, Lord Glover, and I might be a girl, but I am every bit as much a Northerner as you...\"",
     "background_url": "i/bg-day7.jpeg"
   },
   {
@@ -41,15 +41,15 @@
     "background_url": "i/bg-day8.jpg"
   },
   {
-    "image_url": "i/day9-looby-olly-brutons.jpeg",
+    "image_url": "i/day9-looby40.jpg",
     "synopsis": "",
-    "title": "\"I wear your Grandad's clothes!\"",
+    "title": "\"I wear yer Grandad's clothes. I look incredible.\"",
     "background_url": "i/bg-day9.jpg"
   },
   {
-    "image_url": "i/day10-steve-emma-boom.jpeg",
+    "image_url": "i/day10-molly-thriftshop.jpg",
     "synopsis": "",
-    "title": "Brains of the family?",
+    "title": "♬♬♪♪ Drivin' home for Christmas ♬ ♪",
     "background_url": "i/bg-day10.jpg"
   },
   {
@@ -72,13 +72,13 @@
   },
   {
     "image_url": "i/day14-al-harvey.jpeg",
-    "title": "Cold ass donkey",
+    "title": "← Cold'Ass donkey",
     "background_url": "i/bg-day14.jpeg"
   },
   {
     "image_url": "i/day15-toby-monobrow.jpeg",
     "synopsis": "",
-    "title": "Sir Toby Monobrow Womud",
+    "title": "Sir Toby Monobrow Womud at your service...",
     "background_url": "i/bg-day15.jpeg"
   },
   {
@@ -91,19 +91,19 @@
     "image_url": "i/day17-westie-genesia.jpeg",
     "synopsis": "",
     "title": "\"The 2 idiots you ordered have arrived!\"",
-    "background_url": "i/bg-day17.jpeg"
+    "background_url": "i/bg-day17-ruskin-valley.jpeg"
   },
   {
     "image_url": "i/day18-coby-covid.jpeg",
     "synopsis": "",
     "title": "Halloween Covid Skellington",
-    "background_url": "i/bg-day18.jpeg"
+    "background_url": "i/bg-day18-snow-flags.jpeg"
   },
   {
     "image_url": "i/day19-tony-balloons.jpeg",
     "synopsis": "",
-    "title": "\"It was only with this very simple disguise plus a cheap can of cider that I managed to make my escape\"",
-    "background_url": "i/bg-day19.jpeg"
+    "title": "\"With merely this cheap can of cider, plus some simple aparatus, I made good my escape.\"",
+    "background_url": "i/bg-day19.jpg"
   },
   {
     "image_url": "i/day20-steve-antlers.jpg ",
@@ -114,22 +114,26 @@
   {
     "image_url": "i/day21-westie-shorts.jpeg",
     "synopsis": "",
-    "title": "There are no words"
+    "title": "There are no words",
+    "background_url": "i/bg-day20.jpg"
   },
   {
     "image_url": "i/day22-ali-toilet.jpeg",
     "synopsis": "",
-    "title": "Giant woman struggles with Nailsworth facilities"
+    "title": "Giant woman struggles with Nailsworth facilities",
+    "background_url": "i/bg-day22-santas.jpg"
   },
   {
-    "image_url": "i/day23.jpg",
+    "image_url": "i/day23-flash-mob.jpg",
     "synopsis": "",
-    "title": ""
+    "title": "LET ME SEE YOU SHAKE THOSE TAIL FEATHERS!!!",
+    "background_url": "i/bg-day23-love-shack.jpg"
   },
   {
-    "image_url": "i/day24.jpg",
+    "image_url": "i/alison-wi.mp4",
     "synopsis": "",
-    "title": "",
-    "background_url": "i/bg-day24.jpeg"
+    "title": "Merry Christmas!!!",
+    "type": "video",
+    "background_url": "i/bg-day24-rudolf.jpg"
   }
 ]

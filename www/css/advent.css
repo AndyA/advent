@@ -66,11 +66,11 @@ body {
 }
 
 #popup .header {
-  padding-top: 5.5vmin;
+  padding-top: 9.5vmin;
 }
 
 #popup .body {
-  margin-bottom: 3vmin;
+  margin-bottom: 5vmin;
 }
 
 a {
@@ -79,20 +79,18 @@ a {
 
 h1.title,
 #popup .body {
-  margin-left: 14vmin;
-  text-align: center;
-  margin-right: 10vmin;
+  margin: 1vmin 20vmin 4vmin;
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {
   #popup .body {
-    margin: 2vmin 3vmin;
+    margin: 2vmin 3vmin 5vmin;
   }
-
+  /*
   #popup .header,
   #popup .body {
     padding-left: 0;
-  }
+  } */
 }
 
 h2.date {
@@ -124,12 +122,18 @@ h2.date .month {
 
 h1.title {
   font-weight: normal;
+  line-height: 1.25em;
+  font-size: 3vw;
+}
+
+@media screen and (min-width: 1080px) {
+  h1.title {
+    font-size: 28px;
+  }
 }
 
 h1 a {
   text-decoration: none;
-  font-size: 22px;
-  padding: 0 10vmin;
 }
 
 @media only screen and (max-aspect-ratio: 1/1) {
@@ -142,16 +146,20 @@ h1 a {
   }
 }
 
+/* #popup .day-image,
+#popup .synopsis {
+  float: left;
+} */
+
 #popup .day-image {
-  margin: 0 auto 2vmin;
+  padding: 0;
   text-align: center;
 }
 
 #popup .synopsis {
-  display: none;
-  /* margin: 0;
+  margin: 0;
   width: 45%;
-  padding: 0; */
+  padding: 0;
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {
@@ -163,7 +171,7 @@ h1 a {
 
 #popup .day-image img {
   max-width: 100%;
-  max-height: 50vh;
+  max-height: 60vh;
 }
 
 #popup p.description {

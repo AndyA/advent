@@ -36,6 +36,29 @@ $(function() {
     return from * Math.pow(inc, step);
   }
 
+  function mediaElement(data) {
+    const type = data.type || "image";
+
+    if (type === "image")
+      return $("<img>").attr({
+        src: data.image_url,
+        alt: data.title,
+        title: data.title
+      });
+
+    if (type === "video")
+      return $("<video>")
+        .attr({ autoplay: true, controls: true, loop: true, width: 300 })
+        .append(
+          $("<source>").attr({
+            src: data.image_url,
+            type: "video/mp4"
+          })
+        );
+
+    throw new Error(`unknown media type ${type}`);
+  }
+
   function showPopup(data) {
     if (data.url) {
       $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
@@ -53,11 +76,9 @@ $(function() {
     $("#popup .title a").text(data.title);
     $("#popup .synopsis .description").text(data.synopsis);
 
-    $("#popup .day-image img").attr({
-      src: data.image_url,
-      alt: data.title,
-      title: data.title
-    });
+    $("#popup .day-image")
+      .empty()
+      .append(mediaElement(data));
 
     $("#popup").show();
   }
