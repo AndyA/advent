@@ -1,5 +1,4 @@
-$(function() {
-  var bgImage = null;
+$(function () {
   var snowStorm = null;
   var snowFlake = null;
   var offScreenCanvas = null;
@@ -76,9 +75,7 @@ $(function() {
     $("#popup .title a").text(data.title);
     $("#popup .synopsis .description").text(data.synopsis);
 
-    $("#popup .day-image")
-      .empty()
-      .append(mediaElement(data));
+    $("#popup .day-image").empty().append(mediaElement(data));
 
     $("#popup").show();
   }
@@ -123,7 +120,6 @@ $(function() {
 
   var snowStep;
   var snowSteps;
-  var snowStartXC;
   var snowStartY;
   var snowStartScale;
   var snowEndScale;
@@ -137,7 +133,7 @@ $(function() {
     snowEndScale = (width + height) / 50;
   }
 
-  var Renderer = function(canvas, click) {
+  var Renderer = function (canvas, click) {
     var ctx = canvas.getContext("2d");
     var ps;
 
@@ -148,14 +144,14 @@ $(function() {
     scaleSnow(canvas.width, canvas.height);
 
     var that = {
-      init: function(system) {
+      init: function (system) {
         ps = system;
         ps.screenSize(canvas.width, canvas.height);
         ps.screenPadding(canvas.height / 10, canvas.width / 10);
         that.initMouseHandling();
       },
 
-      drawGraph: function(ctx, past) {
+      drawGraph: function (ctx, past) {
         var alphaPast = 1;
         var alphaFuture = 0.4;
         var radiusPast = (canvas.width + canvas.height) / 30;
@@ -165,7 +161,7 @@ $(function() {
         ctx.lineWidth = 2;
         ctx.setLineDash([8, 8]);
 
-        ps.eachEdge(function(edge, pt1, pt2) {
+        ps.eachEdge(function (edge, pt1, pt2) {
           var edgeDay = Math.max(edge.source.data.day, edge.target.data.day);
           var inPast = edgeDay <= activeDay;
           if (past !== inPast) return;
@@ -176,9 +172,6 @@ $(function() {
             255,
             inPast ? alphaPast : alphaFuture
           );
-
-          var dx = pt2.x - pt1.x;
-          var dy = pt2.y - pt1.y;
 
           ctx.beginPath();
           ctx.moveTo(pt1.x, pt1.y);
@@ -191,7 +184,7 @@ $(function() {
         ctx.save();
         ctx.lineWidth = 2;
 
-        ps.eachNode(function(node, pt) {
+        ps.eachNode(function (node, pt) {
           var age = activeDay - node.data.day;
           var inPast = age >= 0;
           if (past != inPast) return;
@@ -237,13 +230,13 @@ $(function() {
         ctx.restore();
       },
 
-      drawOverlay: function(ctx) {
+      drawOverlay: function (ctx) {
         ctx.save();
         snowStorm.redraw(ctx);
         ctx.restore();
       },
 
-      redraw: function() {
+      redraw: function () {
         ctx.save();
 
         if (Math.abs(currentDay - activeDay) < 0.1) {
@@ -302,9 +295,9 @@ $(function() {
         ctx.restore();
       },
 
-      initMouseHandling: function() {
+      initMouseHandling: function () {
         $(canvas)
-          .click(function(e) {
+          .click(function (e) {
             var pos = $(this).offset();
             var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
             var hit = ps.nearest(mp);
@@ -317,7 +310,7 @@ $(function() {
               showPopup(hit.node.data);
             }
           })
-          .mousemove(function(e) {
+          .mousemove(function (e) {
             var pos = $(this).offset();
             var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
             var hit = ps.nearest(mp);
@@ -354,15 +347,15 @@ $(function() {
   if (query.day !== undefined)
     currentDay = Math.max(1, Math.min(parseInt(query.day), 24));
 
-  $(document).on("keypress", function(event) {
+  $(document).on("keypress", function (event) {
     if (event.which == 27) hidePopup();
   });
 
-  $("#popup").click(function(ev) {
+  $("#popup").click(function () {
     hidePopup();
   });
 
-  $("#advent").each(function() {
+  $("#advent").each(function () {
     var cvs = this;
 
     snowFlake = new SnowFlake();
@@ -374,11 +367,11 @@ $(function() {
     });
 
     $(window)
-      .mousemove(function(ev) {
+      .mousemove(function (ev) {
         var xp = ev.pageX / cvs.width - 0.5;
         snowStorm.setDrift(xp);
       })
-      .resize(function() {
+      .resize(function () {
         resize(cvs, ps);
       });
 
@@ -390,10 +383,10 @@ $(function() {
       gravity: true
     });
 
-    ps.renderer = Renderer(cvs, function(hit) {});
+    ps.renderer = Renderer(cvs, function () {});
 
     $.get("data.json")
-      .then(function(data) {
+      .then(function (data) {
         console.log("Data loaded", data);
         for (var i = 0; i < data.length; i++) {
           var info = data[i];
@@ -413,17 +406,17 @@ $(function() {
           background: data[currentDay - 1].background_url || "i/bg-badger.jpg"
         };
 
-        $.each(images, function(tag, url) {
+        $.each(images, function (tag, url) {
           var img = $("<img>")
             .attr({
               src: url
             })
-            .load(function() {
+            .load(function () {
               imageStore[tag] = img[0];
             });
         });
       })
-      .fail(function(err) {});
+      .fail(function () {});
 
     ps.fps(25);
   });
