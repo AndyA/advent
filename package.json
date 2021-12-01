@@ -1,0 +1,43 @@
+{
+  "name": "advent",
+  "version": "0.3.0",
+  "description": "An Advent Calendar",
+  "main": "index.js",
+  "bin": {
+    "advent": "bin/dateTest.js"
+  },
+  "scripts": {
+    "dev": "http-server -p 3009 www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false,
+    "quoteProps": "consistent",
+    "jsxSingleQuote": false,
+    "trailingComma": "none",
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "requirePragma": false,
+    "insertPragma": false,
+    "proseWrap": "preserve",
+    "htmlWhitespaceSensitivity": "css",
+    "endOfLine": "lf"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndyA/advent.git"
+  },
+  "author": "Andy Armstrong <andy@hexten.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AndyA/advent/issues"
+  },
+  "homepage": "https://github.com/AndyA/advent#readme",
+  "devDependencies": {
+    "http-server": "^14.0.0",
+    "nodemon": "^2.0.15"
+  }
+}
