@@ -38,6 +38,6 @@
   "homepage": "https://github.com/AndyA/advent#readme",
   "devDependencies": {
     "http-server": "^14.0.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.20"
   }
 }
