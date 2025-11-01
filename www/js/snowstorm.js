@@ -5,11 +5,11 @@ function SnowStorm(options) {
 }
 
 $.extend(SnowStorm.prototype, {
-  setDrift: function(n) {
+  setDrift: function (n) {
     this.drift = n;
   },
 
-  makeFlake: function() {
+  makeFlake: function () {
     return {
       x: Math.random(),
       y: 0,
@@ -18,7 +18,7 @@ $.extend(SnowStorm.prototype, {
     };
   },
 
-  update: function() {
+  update: function () {
     var flakes = [];
 
     for (var i = 0; i < this.flakes.length; i++) {
@@ -26,16 +26,13 @@ $.extend(SnowStorm.prototype, {
       flake.y += flake.v / flake.r;
       if (flake.y >= 1.0) continue;
       flake.x += this.drift / 20 / flake.r;
-      if (flake.x < 0)
-        flake.x += 1.0;
-      if (flake.x > 1.0)
-        flake.x -= 1.0;
+      if (flake.x < 0) flake.x += 1.0;
+      if (flake.x > 1.0) flake.x -= 1.0;
       flake.v *= this.opt.gravity;
       flakes.push(flake);
     }
 
-    var need = Math.min(this.opt.birthRate, this.opt.flakes -
-      flakes.length);
+    var need = Math.min(this.opt.birthRate, this.opt.flakes - flakes.length);
     for (var i = 0; i < need; i++) {
       flakes.push(this.makeFlake());
     }
@@ -43,7 +40,7 @@ $.extend(SnowStorm.prototype, {
     this.flakes = flakes;
   },
 
-  redraw: function(ctx) {
+  redraw: function (ctx) {
     this.update();
 
     var flakes = this.flakes;
@@ -55,13 +52,10 @@ $.extend(SnowStorm.prototype, {
     for (var i = 0; i < flakes.length; i++) {
       var flake = flakes[i];
       ctx.beginPath();
-      ctx.arc(flake.x * cw, flake.y * ch, flake.r, 0, 2 * Math.PI,
-        false);
+      ctx.arc(flake.x * cw, flake.y * ch, flake.r, 0, 2 * Math.PI, false);
       ctx.fill();
     }
 
     ctx.restore();
   }
 });
-
-
