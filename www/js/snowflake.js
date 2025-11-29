@@ -18,10 +18,6 @@ class SnowFlake {
     return Math.random() < 0.5 ? centre + rand : centre - rand;
   }
 
-  static rgba(r, g, b, a) {
-    return `rgba(${[...arguments].join(", ")})`;
-  }
-
   spinBy(angle) {
     this.rotate += angle;
   }
