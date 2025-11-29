@@ -133,7 +133,7 @@ $(() => {
     snowEndScale = (width + height) / 50;
   };
 
-  const Renderer = (canvas, click) => {
+  const makeRenderer = (canvas, click) => {
     const ctx = canvas.getContext("2d");
 
     snowStep = 0;
@@ -381,7 +381,7 @@ $(() => {
       gravity: true
     });
 
-    ps.renderer = Renderer(cvs, () => {});
+    ps.renderer = makeRenderer(cvs, () => {});
 
     $.get("data.json")
       .then(data => {
