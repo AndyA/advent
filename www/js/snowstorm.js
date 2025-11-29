@@ -1,28 +1,27 @@
-function SnowStorm(options) {
-  this.opt = options;
-  this.flakes = [];
-  this.setDrift(0);
-}
+class SnowStorm {
+  constructor(options) {
+    this.opt = options;
+    this.flakes = [];
+    this.setDrift(0);
+  }
 
-$.extend(SnowStorm.prototype, {
-  setDrift: function (n) {
+  setDrift(n) {
     this.drift = n;
-  },
+  }
 
-  makeFlake: function () {
+  makeFlake() {
     return {
       x: Math.random(),
       y: 0,
       v: (1 + Math.random()) / 200,
       r: Math.random() * Math.random() * 2 + 2
     };
-  },
+  }
 
-  update: function () {
-    var flakes = [];
+  update() {
+    const flakes = [];
 
-    for (var i = 0; i < this.flakes.length; i++) {
-      var flake = this.flakes[i];
+    for (const flake of this.flakes) {
       flake.y += flake.v / flake.r;
       if (flake.y >= 1.0) continue;
       flake.x += this.drift / 20 / flake.r;
@@ -32,25 +31,24 @@ $.extend(SnowStorm.prototype, {
       flakes.push(flake);
     }
 
-    var need = Math.min(this.opt.birthRate, this.opt.flakes - flakes.length);
-    for (var i = 0; i < need; i++) {
+    const need = Math.min(this.opt.birthRate, this.opt.flakes - flakes.length);
+    for (let i = 0; i < need; i++) {
       flakes.push(this.makeFlake());
     }
 
     this.flakes = flakes;
-  },
+  }
 
-  redraw: function (ctx) {
+  redraw(ctx) {
     this.update();
 
-    var flakes = this.flakes;
-    var cw = ctx.canvas.width;
-    var ch = ctx.canvas.height;
+    const flakes = this.flakes;
+    const cw = ctx.canvas.width;
+    const ch = ctx.canvas.height;
 
     ctx.save();
     ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-    for (var i = 0; i < flakes.length; i++) {
-      var flake = flakes[i];
+    for (const flake of flakes) {
       ctx.beginPath();
       ctx.arc(flake.x * cw, flake.y * ch, flake.r, 0, 2 * Math.PI, false);
       ctx.fill();
@@ -58,4 +56,4 @@ $.extend(SnowStorm.prototype, {
 
     ctx.restore();
   }
-});
+}
