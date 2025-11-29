@@ -2,7 +2,7 @@ html {
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: helvetica, arial, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -74,12 +74,19 @@ body {
 }
 
 a {
-  color: #000;
+  color: #e60684;
+  padding-bottom: 6px;
+}
+
+a:hover {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
 }
 
 h1.title,
 #popup .body {
   margin: 2vmin 30vmin 4vmin;
+  text-align: center;
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {

@@ -61,7 +61,7 @@ const showPopup = data => {
   }
 
   $("#popup .date .day-num").text(data.day + nth(data.day));
-  $("#popup .title a").text(data.title);
+  $("#popup .title").html(data.title);
   $("#popup .synopsis .description").text(data.synopsis);
 
   $("#popup .day-image").empty().append(mediaElement(data));
