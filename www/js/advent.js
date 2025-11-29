@@ -165,13 +165,10 @@ $(() => {
           const edgeDay = Math.max(edge.source.data.day, edge.target.data.day);
           const inPast = edgeDay <= activeDay;
           if (past !== inPast) return;
+          const white = rgba(255, 255, 255, inPast ? alphaPast : alphaFuture);
+          // const pink = rgba(230, 6, 132, inPast ? alphaPast : alphaFuture);
 
-          ctx.strokeStyle = rgba(
-            255,
-            255,
-            255,
-            inPast ? alphaPast : alphaFuture
-          );
+          ctx.strokeStyle = white;
 
           ctx.beginPath();
           ctx.moveTo(pt1.x, pt1.y);
@@ -188,18 +185,16 @@ $(() => {
           const age = activeDay - node.data.day;
           const inPast = age >= 0;
           if (past != inPast) return;
+          const white = rgba(255, 255, 255, inPast ? alphaPast : alphaFuture);
+
+          const isToday = node.data.day == currentDay;
 
           const nw =
             age >= 0 ? radiusPast / (1 + Math.sqrt(age / 3)) : radiusFuture;
           node.data.radius = nw; // cached for later
-          ctx.strokeStyle = rgba(
-            255,
-            255,
-            255,
-            inPast ? alphaPast : alphaFuture
-          );
 
           // Outer circle
+          ctx.strokeStyle = white;
           ctx.beginPath();
           ctx.moveTo(pt.x + nw, pt.y);
           ctx.arc(pt.x, pt.y, nw, 0, 2 * Math.PI);
@@ -212,6 +207,7 @@ $(() => {
           // Inner circle
           if (age >= 1) {
             ctx.save();
+            ctx.strokeStyle = white;
             const rr = (nw * 2) / 3;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
@@ -221,7 +217,7 @@ $(() => {
             ctx.restore();
           }
 
-          if (node.data.day == currentDay) {
+          if (isToday) {
             snowEndX = pt.x;
             snowEndY = pt.y;
           }
