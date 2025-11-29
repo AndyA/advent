@@ -241,8 +241,11 @@ $(() => {
 
         if (Math.abs(currentDay - activeDay) < 0.1) {
           activeDay = currentDay;
-        } else if (activeDay < currentDay) activeDay += 0.1;
-        else if (activeDay > currentDay) activeDay -= 0.1;
+        } else if (activeDay < currentDay) {
+          activeDay += 0.1;
+        } else if (activeDay > currentDay) {
+          activeDay -= 0.1;
+        }
 
         if (imageStore.background) {
           fillBox(ctx, imageStore.background);
