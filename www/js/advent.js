@@ -150,7 +150,7 @@ $(() => {
         this.initMouseHandling();
       },
 
-      drawGraph(ctx, past) {
+      drawGraph(ctx) {
         const alphaPast = 1;
         const alphaFuture = 0.4;
         const radiusPast = (canvas.width + canvas.height) / 30;
@@ -163,9 +163,7 @@ $(() => {
         this.ps.eachEdge((edge, pt1, pt2) => {
           const edgeDay = Math.max(edge.source.data.day, edge.target.data.day);
           const inPast = edgeDay <= activeDay;
-          if (past !== inPast) return;
           const white = rgba(255, 255, 255, inPast ? alphaPast : alphaFuture);
-          // const pink = rgba(230, 6, 132, inPast ? alphaPast : alphaFuture);
 
           ctx.strokeStyle = white;
 
@@ -183,7 +181,6 @@ $(() => {
         this.ps.eachNode((node, pt) => {
           const age = activeDay - node.data.day;
           const inPast = age >= 0;
-          if (past != inPast) return;
           const white = rgba(255, 255, 255, inPast ? alphaPast : alphaFuture);
 
           const isToday = node.data.day == currentDay;
@@ -253,8 +250,7 @@ $(() => {
         octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
         graph.drawOverlay(octx);
         if (currentDay > 0) {
-          graph.drawGraph(octx, false);
-          graph.drawGraph(octx, true);
+          graph.drawGraph(octx);
         }
 
         ctx.drawImage(offScreenCanvas, 0, 0);
