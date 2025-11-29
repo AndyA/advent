@@ -403,7 +403,7 @@ $(function () {
 
         // Data loaded
         var images = {
-          background: data[currentDay - 1].background_url || "i/bg-badger.jpg"
+          background: data[currentDay - 1]?.background_url || "i/bg-badger.jpg"
         };
 
         $.each(images, function (tag, url) {
