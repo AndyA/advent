@@ -143,12 +143,12 @@ $(() => {
     snowEndY = null;
     scaleSnow(canvas.width, canvas.height);
 
-    const that = {
+    const graph = {
       init(system) {
         ps = system;
         ps.screenSize(canvas.width, canvas.height);
         ps.screenPadding(canvas.height / 10, canvas.width / 10);
-        that.initMouseHandling();
+        this.initMouseHandling();
       },
 
       drawGraph(ctx, past) {
@@ -252,10 +252,10 @@ $(() => {
 
         const octx = offScreenCanvas.getContext("2d");
         octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
-        that.drawOverlay(octx);
+        graph.drawOverlay(octx);
         if (currentDay > 0) {
-          that.drawGraph(octx, false);
-          that.drawGraph(octx, true);
+          graph.drawGraph(octx, false);
+          graph.drawGraph(octx, true);
         }
 
         ctx.drawImage(offScreenCanvas, 0, 0);
@@ -326,7 +326,7 @@ $(() => {
           });
       }
     };
-    return that;
+    return graph;
   };
 
   const resize = (cvs, ps) => {
