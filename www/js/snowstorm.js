@@ -14,7 +14,8 @@ class SnowStorm {
       x: Math.random(),
       y: 0,
       v: (1 + Math.random()) / 200,
-      r: Math.random() * Math.random() * 2 + 2
+      radius: Math.random() * Math.random() * 2 + 2,
+      pinkSheep: Math.random() < 0.5
     };
   }
 
@@ -22,9 +23,9 @@ class SnowStorm {
     const flakes = [];
 
     for (const flake of this.flakes) {
-      flake.y += flake.v / flake.r;
+      flake.y += flake.v / flake.radius;
       if (flake.y >= 1.0) continue;
-      flake.x += this.drift / 20 / flake.r;
+      flake.x += this.drift / 20 / flake.radius;
       if (flake.x < 0) flake.x += 1.0;
       if (flake.x > 1.0) flake.x -= 1.0;
       flake.v *= this.opt.gravity;
@@ -47,10 +48,12 @@ class SnowStorm {
     const ch = ctx.canvas.height;
 
     ctx.save();
-    ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+    const white = "rgba(255, 255, 255, 0.7)";
+    const pink = "rgba(230, 6, 132, 0.7)";
     for (const flake of flakes) {
+      ctx.fillStyle = flake.pinkSheep ? pink : white;
       ctx.beginPath();
-      ctx.arc(flake.x * cw, flake.y * ch, flake.r, 0, 2 * Math.PI, false);
+      ctx.arc(flake.x * cw, flake.y * ch, flake.radius, 0, 2 * Math.PI, false);
       ctx.fill();
     }
 
