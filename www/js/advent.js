@@ -1,141 +1,141 @@
-$(function () {
-  var snowStorm = null;
-  var snowFlake = null;
-  var offScreenCanvas = null;
+const adventDate = dt => {
+  const mo = dt.getMonth();
+  if (mo < 6) return 24;
+  if (mo < 11) return 0;
+  return Math.min(dt.getDate(), 24);
+};
 
-  var currentDay = adventDate(new Date());
+function nth(x) {
+  switch (Math.round(x % 20)) {
+    default:
+      return "th";
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+  }
+}
 
-  var activeDay = -2;
+const easer = (from, to, steps, step) => {
+  if (step >= steps) return to;
+  const inc = Math.pow(to / from, 1 / steps);
+  return from * Math.pow(inc, step);
+};
 
-  var imageStore = {};
+const mediaElement = data => {
+  const type = data.type || "image";
 
-  function adventDate(dt) {
-    var mo = dt.getMonth();
-    if (mo < 6) return 24;
-    if (mo < 11) return 0;
-    return Math.min(dt.getDate(), 24);
+  if (type === "image")
+    return $("<img>").attr({
+      src: data.image_url,
+      alt: data.title,
+      title: data.title
+    });
+
+  if (type === "video")
+    return $("<video>")
+      .attr({ autoplay: true, controls: true, loop: true, width: 300 })
+      .append(
+        $("<source>").attr({
+          src: data.image_url,
+          type: "video/mp4"
+        })
+      );
+
+  throw new Error(`unknown media type ${type}`);
+};
+
+const showPopup = data => {
+  if (data.url) {
+    $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
+      href: data.url
+    });
+    $("#popup .view-media").show();
+  } else {
+    $("#popup .day-image a, #popup .view-media a, #popup .title a").removeAttr(
+      "href"
+    );
+    $("#popup .view-media").hide();
   }
 
-  function nth(x) {
-    switch (Math.round(x % 20)) {
-      default:
-        return "th";
-      case 1:
-        return "st";
-      case 2:
-        return "nd";
-      case 3:
-        return "rd";
-    }
+  $("#popup .date .day-num").text(data.day + nth(data.day));
+  $("#popup .title a").text(data.title);
+  $("#popup .synopsis .description").text(data.synopsis);
+
+  $("#popup .day-image").empty().append(mediaElement(data));
+
+  $("#popup").show();
+};
+
+const hidePopup = () => {
+  $("#popup").hide();
+};
+
+const getQuery = () => {
+  const queryString = window.location.search.substring(1);
+  const vars = queryString.split("&");
+  const query = {};
+  for (const variable of vars) {
+    const pair = variable.split("=");
+    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+  }
+  return query;
+};
+
+const fillBox = (ctx, img) => {
+  const cw = ctx.canvas.width;
+  const ch = ctx.canvas.height;
+  const iw = img.width;
+  const ih = img.height;
+
+  if (cw / ch < iw / ih) {
+    const sc = ch / ih;
+    ctx.drawImage(img, (iw - cw / sc) / 2, 0, cw / sc, ih, 0, 0, cw, ch);
+  } else {
+    const sc = cw / iw;
+    ctx.drawImage(img, 0, (ih - ch / sc) / 2, iw, ch / sc, 0, 0, cw, ch);
   }
 
-  function easer(from, to, steps, step) {
-    if (step >= steps) return to;
-    var inc = Math.pow(to / from, 1 / steps);
-    return from * Math.pow(inc, step);
-  }
+  // translucent overlay
+  ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+  ctx.fillRect(0, 0, cw, ch);
+};
 
-  function mediaElement(data) {
-    const type = data.type || "image";
+const rgba = (r, g, b, a) => {
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+};
 
-    if (type === "image")
-      return $("<img>").attr({
-        src: data.image_url,
-        alt: data.title,
-        title: data.title
-      });
+$(() => {
+  let snowStorm = null;
+  let snowFlake = null;
+  let offScreenCanvas = null;
 
-    if (type === "video")
-      return $("<video>")
-        .attr({ autoplay: true, controls: true, loop: true, width: 300 })
-        .append(
-          $("<source>").attr({
-            src: data.image_url,
-            type: "video/mp4"
-          })
-        );
+  let currentDay = adventDate(new Date());
 
-    throw new Error(`unknown media type ${type}`);
-  }
+  let activeDay = -2;
 
-  function showPopup(data) {
-    if (data.url) {
-      $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
-        href: data.url
-      });
-      $("#popup .view-media").show();
-    } else {
-      $(
-        "#popup .day-image a, #popup .view-media a, #popup .title a"
-      ).removeAttr("href");
-      $("#popup .view-media").hide();
-    }
+  const imageStore = {};
 
-    $("#popup .date .day-num").text(data.day + nth(data.day));
-    $("#popup .title a").text(data.title);
-    $("#popup .synopsis .description").text(data.synopsis);
+  let snowStep;
+  let snowSteps;
+  let snowStartY;
+  let snowStartScale;
+  let snowEndScale;
+  let snowEndX;
+  let snowEndY;
 
-    $("#popup .day-image").empty().append(mediaElement(data));
-
-    $("#popup").show();
-  }
-
-  function hidePopup() {
-    $("#popup").hide();
-  }
-
-  function getQuery() {
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    var query = {};
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split("=");
-      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-    }
-    return query;
-  }
-
-  function fillBox(ctx, img) {
-    var cw = ctx.canvas.width;
-    var ch = ctx.canvas.height;
-    var iw = img.width;
-    var ih = img.height;
-
-    if (cw / ch < iw / ih) {
-      var sc = ch / ih;
-      ctx.drawImage(img, (iw - cw / sc) / 2, 0, cw / sc, ih, 0, 0, cw, ch);
-    } else {
-      var sc = cw / iw;
-      ctx.drawImage(img, 0, (ih - ch / sc) / 2, iw, ch / sc, 0, 0, cw, ch);
-    }
-
-    // translucent overlay
-    ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
-    ctx.fillRect(0, 0, cw, ch);
-  }
-
-  function rgba(r, g, b, a) {
-    return "rgba(" + [].slice.call(arguments).join(", ") + ")";
-  }
-
-  var snowStep;
-  var snowSteps;
-  var snowStartY;
-  var snowStartScale;
-  var snowEndScale;
-  var snowEndX;
-  var snowEndY;
-
-  function scaleSnow(width, height) {
+  const scaleSnow = (width, height) => {
     snowStartX = width / 2;
     snowStartY = height / 2;
     snowStartScale = Math.min(snowStartX, snowStartY) * 3;
     snowEndScale = (width + height) / 50;
-  }
+  };
 
-  var Renderer = function (canvas, click) {
-    var ctx = canvas.getContext("2d");
-    var ps;
+  const Renderer = (canvas, click) => {
+    const ctx = canvas.getContext("2d");
+    let ps;
 
     snowStep = 0;
     snowSteps = currentDay * 10 + 20;
@@ -143,27 +143,27 @@ $(function () {
     snowEndY = null;
     scaleSnow(canvas.width, canvas.height);
 
-    var that = {
-      init: function (system) {
+    const that = {
+      init(system) {
         ps = system;
         ps.screenSize(canvas.width, canvas.height);
         ps.screenPadding(canvas.height / 10, canvas.width / 10);
         that.initMouseHandling();
       },
 
-      drawGraph: function (ctx, past) {
-        var alphaPast = 1;
-        var alphaFuture = 0.4;
-        var radiusPast = (canvas.width + canvas.height) / 30;
-        var radiusFuture = radiusPast / 3;
+      drawGraph(ctx, past) {
+        const alphaPast = 1;
+        const alphaFuture = 0.4;
+        const radiusPast = (canvas.width + canvas.height) / 30;
+        const radiusFuture = radiusPast / 3;
 
         ctx.save();
         ctx.lineWidth = 2;
         ctx.setLineDash([8, 8]);
 
-        ps.eachEdge(function (edge, pt1, pt2) {
-          var edgeDay = Math.max(edge.source.data.day, edge.target.data.day);
-          var inPast = edgeDay <= activeDay;
+        ps.eachEdge((edge, pt1, pt2) => {
+          const edgeDay = Math.max(edge.source.data.day, edge.target.data.day);
+          const inPast = edgeDay <= activeDay;
           if (past !== inPast) return;
 
           ctx.strokeStyle = rgba(
@@ -184,12 +184,12 @@ $(function () {
         ctx.save();
         ctx.lineWidth = 2;
 
-        ps.eachNode(function (node, pt) {
-          var age = activeDay - node.data.day;
-          var inPast = age >= 0;
+        ps.eachNode((node, pt) => {
+          const age = activeDay - node.data.day;
+          const inPast = age >= 0;
           if (past != inPast) return;
 
-          var nw =
+          const nw =
             age >= 0 ? radiusPast / (1 + Math.sqrt(age / 3)) : radiusFuture;
           node.data.radius = nw; // cached for later
           ctx.strokeStyle = rgba(
@@ -212,7 +212,7 @@ $(function () {
           // Inner circle
           if (age >= 1) {
             ctx.save();
-            var rr = (nw * 2) / 3;
+            const rr = (nw * 2) / 3;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
             ctx.moveTo(pt.x + rr, pt.y);
@@ -230,13 +230,13 @@ $(function () {
         ctx.restore();
       },
 
-      drawOverlay: function (ctx) {
+      drawOverlay(ctx) {
         ctx.save();
         snowStorm.redraw(ctx);
         ctx.restore();
       },
 
-      redraw: function () {
+      redraw() {
         ctx.save();
 
         if (Math.abs(currentDay - activeDay) < 0.1) {
@@ -251,7 +251,7 @@ $(function () {
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
-        var octx = offScreenCanvas.getContext("2d");
+        const octx = offScreenCanvas.getContext("2d");
         octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
         that.drawOverlay(octx);
         if (currentDay > 0) {
@@ -269,9 +269,9 @@ $(function () {
         ) {
           ctx.save();
 
-          var snowX = easer(snowStartX, snowEndX, snowSteps, snowStep);
-          var snowY = easer(snowStartY, snowEndY, snowSteps, snowStep);
-          var snowScale = easer(
+          const snowX = easer(snowStartX, snowEndX, snowSteps, snowStep);
+          const snowY = easer(snowStartY, snowEndY, snowSteps, snowStep);
+          const snowScale = easer(
             snowStartScale,
             snowEndScale,
             snowSteps,
@@ -295,12 +295,12 @@ $(function () {
         ctx.restore();
       },
 
-      initMouseHandling: function () {
+      initMouseHandling() {
         $(canvas)
-          .click(function (e) {
-            var pos = $(this).offset();
-            var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-            var hit = ps.nearest(mp);
+          .click(e => {
+            const pos = $(canvas).offset();
+            const mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+            const hit = ps.nearest(mp);
             if (hit) click(hit);
             if (
               hit &&
@@ -310,19 +310,19 @@ $(function () {
               showPopup(hit.node.data);
             }
           })
-          .mousemove(function (e) {
-            var pos = $(this).offset();
-            var mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-            var hit = ps.nearest(mp);
+          .mousemove(e => {
+            const pos = $(canvas).offset();
+            const mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+            const hit = ps.nearest(mp);
             if (hit) click(hit);
             if (
               hit &&
               hit.distance <= hit.node.data.radius &&
               hit.node.data.day <= activeDay
             ) {
-              $(this).addClass("clicky");
+              $(canvas).addClass("clicky");
             } else {
-              $(this).removeClass("clicky");
+              $(canvas).removeClass("clicky");
             }
           });
       }
@@ -330,7 +330,7 @@ $(function () {
     return that;
   };
 
-  function resize(cvs, ps) {
+  const resize = (cvs, ps) => {
     cvs.width = $(window).width();
     cvs.height = $(window).height();
     ps.screenSize(cvs.width, cvs.height);
@@ -341,22 +341,22 @@ $(function () {
     offScreenCanvas.width = cvs.width;
     offScreenCanvas.height = cvs.height;
     scaleSnow(cvs.width, cvs.height);
-  }
+  };
 
-  query = getQuery();
+  const query = getQuery();
   if (query.day !== undefined)
     currentDay = Math.max(1, Math.min(parseInt(query.day), 24));
 
-  $(document).on("keypress", function (event) {
+  $(document).on("keypress", event => {
     if (event.which == 27) hidePopup();
   });
 
-  $("#popup").click(function () {
+  $("#popup").click(() => {
     hidePopup();
   });
 
   $("#advent").each(function () {
-    var cvs = this;
+    const cvs = this;
 
     snowFlake = new SnowFlake();
 
@@ -367,15 +367,15 @@ $(function () {
     });
 
     $(window)
-      .mousemove(function (ev) {
-        var xp = ev.pageX / cvs.width - 0.5;
+      .mousemove(ev => {
+        const xp = ev.pageX / cvs.width - 0.5;
         snowStorm.setDrift(xp);
       })
-      .resize(function () {
+      .resize(() => {
         resize(cvs, ps);
       });
 
-    var ps = arbor.ParticleSystem(1000, 400, 1);
+    const ps = arbor.ParticleSystem(1000, 400, 1);
 
     resize(cvs, ps);
 
@@ -383,18 +383,18 @@ $(function () {
       gravity: true
     });
 
-    ps.renderer = Renderer(cvs, function () {});
+    ps.renderer = Renderer(cvs, () => {});
 
     $.get("data.json")
-      .then(function (data) {
+      .then(data => {
         console.log("Data loaded", data);
-        for (var i = 0; i < data.length; i++) {
-          var info = data[i];
+        for (let i = 0; i < data.length; i++) {
+          const info = data[i];
           info.day = i + 1;
           ps.addNode("day" + info.day, info);
         }
-        var len = 1;
-        for (var i = 1; i < data.length; i++) {
+        let len = 1;
+        for (let i = 1; i < data.length; i++) {
           ps.addEdge("day" + i, "day" + (i + 1), {
             length: len
           });
@@ -402,21 +402,21 @@ $(function () {
         }
 
         // Data loaded
-        var images = {
+        const images = {
           background: data[currentDay - 1]?.background_url || "i/bg-badger.jpg"
         };
 
-        $.each(images, function (tag, url) {
-          var img = $("<img>")
+        $.each(images, (tag, url) => {
+          const img = $("<img>")
             .attr({
               src: url
             })
-            .load(function () {
+            .load(() => {
               imageStore[tag] = img[0];
             });
         });
       })
-      .fail(function () {});
+      .fail(() => {});
 
     ps.fps(25);
   });
