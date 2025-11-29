@@ -135,7 +135,6 @@ $(() => {
 
   const Renderer = (canvas, click) => {
     const ctx = canvas.getContext("2d");
-    let ps;
 
     snowStep = 0;
     snowSteps = currentDay * 10 + 20;
@@ -145,9 +144,9 @@ $(() => {
 
     const graph = {
       init(system) {
-        ps = system;
-        ps.screenSize(canvas.width, canvas.height);
-        ps.screenPadding(canvas.height / 10, canvas.width / 10);
+        this.ps = system;
+        this.ps.screenSize(canvas.width, canvas.height);
+        this.ps.screenPadding(canvas.height / 10, canvas.width / 10);
         this.initMouseHandling();
       },
 
@@ -161,7 +160,7 @@ $(() => {
         ctx.lineWidth = 2;
         ctx.setLineDash([8, 8]);
 
-        ps.eachEdge((edge, pt1, pt2) => {
+        this.ps.eachEdge((edge, pt1, pt2) => {
           const edgeDay = Math.max(edge.source.data.day, edge.target.data.day);
           const inPast = edgeDay <= activeDay;
           if (past !== inPast) return;
@@ -181,7 +180,7 @@ $(() => {
         ctx.save();
         ctx.lineWidth = 2;
 
-        ps.eachNode((node, pt) => {
+        this.ps.eachNode((node, pt) => {
           const age = activeDay - node.data.day;
           const inPast = age >= 0;
           if (past != inPast) return;
@@ -299,7 +298,7 @@ $(() => {
           .click(e => {
             const pos = $(canvas).offset();
             const mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-            const hit = ps.nearest(mp);
+            const hit = this.ps.nearest(mp);
             if (hit) click(hit);
             if (
               hit &&
@@ -312,7 +311,7 @@ $(() => {
           .mousemove(e => {
             const pos = $(canvas).offset();
             const mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-            const hit = ps.nearest(mp);
+            const hit = this.ps.nearest(mp);
             if (hit) click(hit);
             if (
               hit &&
