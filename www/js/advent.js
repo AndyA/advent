@@ -405,8 +405,9 @@ $(() => {
         }
 
         // Data loaded
-        const images = {
-          background: data[currentDay - 1]?.background_url || "i/bg-badger.jpg"
+        var images = {
+          background:
+            data[currentDay - 1]?.background_url || "i/hh-nailsworth-church.png"
         };
 
         $.each(images, (tag, url) => {
