@@ -79,7 +79,7 @@ a {
 
 h1.title,
 #popup .body {
-  margin: 1vmin 20vmin 4vmin;
+  margin: 2vmin 30vmin 4vmin;
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {
