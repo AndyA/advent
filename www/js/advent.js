@@ -55,7 +55,7 @@ const mediaElement = (data, onLoad) => {
 
 const wrapLink = (url, content) => {
   if (url) {
-    return $("<a>").attr({ href: url }).append(content);
+    return $("<a>").attr({ href: url, target: "_blank" }).append(content);
   } else {
     return content;
   }
@@ -367,8 +367,8 @@ $(() => {
     if (event.which == 27) hidePopup();
   });
 
-  $("#popup").click(() => {
-    hidePopup();
+  $("#popup").click(e => {
+    if (e.target.tagName.toLowerCase() != "a") hidePopup();
   });
 
   $("#advent").each(function () {
