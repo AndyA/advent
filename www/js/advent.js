@@ -264,7 +264,7 @@ $(() => {
         if (imageStore.background) {
           fillBox(ctx, imageStore.background);
         } else {
-          ctx.fillStyle = "white";
+          ctx.fillStyle = "gray";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
