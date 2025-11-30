@@ -39,7 +39,7 @@ const mediaElement = (data, onLoad) => {
 
     case "video":
       return $("<video>")
-        .attr({ autoplay: true, controls: true, loop: true, width: 300 })
+        .attr({ autoplay: true, controls: false, loop: true, width: 300 })
         .append(
           $("<source>").attr({
             src: data.image_url,
