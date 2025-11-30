@@ -2,8 +2,8 @@
   {
     "day": 1,
     "image_url": "i/hh-day1.jpg",
-    "title": "Yin leads our <a href=\"https://hundredheroines.org/giving-tuesday-landing/\" target=\"_blank\">Giving Tuesday campaign</a>",
-    "synopsis": "",
+    "title": "Welcome to the 2025 Advent Calendar!",
+    "synopsis": "Yin leads our <a href=\"https://hundredheroines.org/giving-tuesday-landing/\" target=\"_blank\">Giving Tuesday campaign</a>",
     "background_url": "i/hh-nailsworth-church.png"
   },
   {
@@ -36,9 +36,10 @@
   },
   {
     "day": 6,
-    "image_url": "i/day6-olly-armchair.jpeg",
-    "title": "Sittin on the dock of the bay",
-    "synopsis": "",
+    "image_url": "i/hh-merch.mov",
+    "title": "Merch! Merch! Merch!",
+    "type": "video",
+    "synopsis": "Come down to the museum and check out our new tea towels, the perfect gift for the feminists in your life :)",
     "background_url": "i/bg-day6-pizzo-round.jpeg"
   },
   {
