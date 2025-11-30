@@ -62,10 +62,11 @@ const showPopup = data => {
   $("#popup .synopsis").html(data.synopsis ?? "");
 
   const link = $("#popup .synopsis a").first();
-  const media = wrapLink(link.attr("href"), mediaElement(data));
+  const elt = mediaElement(data).load(() => {
+    $("#popup").show();
+  });
+  const media = wrapLink(link.attr("href"), elt);
   $("#popup .day-image").empty().append(media);
-
-  $("#popup").show();
 };
 
 const hidePopup = () => {
