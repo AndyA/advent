@@ -2,11 +2,12 @@ class SnowStorm {
   constructor(options) {
     this.opt = options;
     this.flakes = [];
+    this.drift = 0;
     this.setDrift(0);
   }
 
   setDrift(n) {
-    this.drift = n;
+    this.target = n;
   }
 
   makeFlake() {
@@ -20,6 +21,7 @@ class SnowStorm {
   }
 
   update() {
+    this.drift += (this.target - this.drift) / 10;
     const flakes = [];
 
     for (const flake of this.flakes) {
