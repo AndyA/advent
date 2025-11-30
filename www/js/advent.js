@@ -24,16 +24,18 @@ const easer = (from, to, steps, step) => {
   return from * Math.pow(inc, step);
 };
 
-const mediaElement = data => {
+const mediaElement = (data, onLoad) => {
   const type = data.type || "image";
 
   switch (type) {
     case "image":
-      return $("<img>").attr({
-        src: data.image_url,
-        alt: data.title,
-        title: data.title
-      });
+      return $("<img>")
+        .attr({
+          src: data.image_url,
+          alt: data.title,
+          title: data.title
+        })
+        .load(onLoad);
 
     case "video":
       return $("<video>")
@@ -43,7 +45,8 @@ const mediaElement = data => {
             src: data.image_url,
             type: "video/mp4"
           })
-        );
+        )
+        .ready(onLoad);
 
     default:
       throw new Error(`unknown media type ${type}`);
@@ -64,13 +67,9 @@ const showPopup = data => {
   $("#popup .synopsis").html(data.synopsis ?? "");
 
   const link = $("#popup .synopsis a").first();
-  const elt = mediaElement(data)
-    .load(() => {
-      $("#popup").show();
-    })
-    .ready(() => {
-      $("#popup").show();
-    });
+  const elt = mediaElement(data, () => {
+    $("#popup").show();
+  });
   const media = wrapLink(link.attr("href"), elt);
   $("#popup .day-image").empty().append(media);
 };
