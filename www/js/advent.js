@@ -27,44 +27,43 @@ const easer = (from, to, steps, step) => {
 const mediaElement = data => {
   const type = data.type || "image";
 
-  if (type === "image")
-    return $("<img>").attr({
-      src: data.image_url,
-      alt: data.title,
-      title: data.title
-    });
+  switch (type) {
+    case "image":
+      return $("<img>").attr({
+        src: data.image_url,
+        alt: data.title,
+        title: data.title
+      });
+    case "video":
+      return $("<video>")
+        .attr({ autoplay: true, controls: true, loop: true, width: 300 })
+        .append(
+          $("<source>").attr({
+            src: data.image_url,
+            type: "video/mp4"
+          })
+        );
+    default:
+      throw new Error(`unknown media type ${type}`);
+  }
+};
 
-  if (type === "video")
-    return $("<video>")
-      .attr({ autoplay: true, controls: true, loop: true, width: 300 })
-      .append(
-        $("<source>").attr({
-          src: data.image_url,
-          type: "video/mp4"
-        })
-      );
-
-  throw new Error(`unknown media type ${type}`);
+const wrapLink = (url, content) => {
+  if (url) {
+    return $("<a>").attr({ href: url }).append(content);
+  } else {
+    return content;
+  }
 };
 
 const showPopup = data => {
-  if (data.url) {
-    $("#popup .day-image a, #popup .view-media a, #popup .title a").attr({
-      href: data.url
-    });
-    $("#popup .view-media").show();
-  } else {
-    $("#popup .day-image a, #popup .view-media a, #popup .title a").removeAttr(
-      "href"
-    );
-    $("#popup .view-media").hide();
-  }
-
   $("#popup .date .day-num").text(data.day + nth(data.day));
   $("#popup .title").html(data.title);
   $("#popup .synopsis").html(data.synopsis ?? "");
 
-  $("#popup .day-image").empty().append(mediaElement(data));
+  const link = $("#popup .synopsis a").first();
+  const media = wrapLink(link.attr("href"), mediaElement(data));
+  $("#popup .day-image").empty().append(media);
 
   $("#popup").show();
 };
@@ -395,8 +394,7 @@ $(() => {
           len *= 1.1;
         }
 
-        // Data loaded
-        var images = {
+        const images = {
           background:
             data[currentDay - 1]?.background_url || "i/hh-nailsworth-church.png"
         };
