@@ -34,6 +34,7 @@ const mediaElement = data => {
         alt: data.title,
         title: data.title
       });
+
     case "video":
       return $("<video>")
         .attr({ autoplay: true, controls: true, loop: true, width: 300 })
@@ -43,6 +44,7 @@ const mediaElement = data => {
             type: "video/mp4"
           })
         );
+
     default:
       throw new Error(`unknown media type ${type}`);
   }
@@ -62,14 +64,19 @@ const showPopup = data => {
   $("#popup .synopsis").html(data.synopsis ?? "");
 
   const link = $("#popup .synopsis a").first();
-  const elt = mediaElement(data).load(() => {
-    $("#popup").show();
-  });
+  const elt = mediaElement(data)
+    .load(() => {
+      $("#popup").show();
+    })
+    .ready(() => {
+      $("#popup").show();
+    });
   const media = wrapLink(link.attr("href"), elt);
   $("#popup .day-image").empty().append(media);
 };
 
 const hidePopup = () => {
+  $("#popup video").get(0)?.pause();
   $("#popup").hide();
 };
 
