@@ -210,7 +210,7 @@ $(() => {
           if (age >= 1) {
             ctx.save();
             ctx.strokeStyle = white;
-            const rr = (nw * 2) / 3;
+            const rr = (nw * 4) / 5;
             if (node.data.img) {
               const img = node.data.img;
               ctx.beginPath();
