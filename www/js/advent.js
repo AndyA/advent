@@ -211,11 +211,27 @@ $(() => {
             ctx.save();
             ctx.strokeStyle = white;
             const rr = (nw * 2) / 3;
-            ctx.setLineDash([3, 3]);
-            ctx.beginPath();
-            ctx.moveTo(pt.x + rr, pt.y);
-            ctx.arc(pt.x, pt.y, rr, 0, 2 * Math.PI);
-            ctx.stroke();
+            if (node.data.img) {
+              const img = node.data.img;
+              ctx.beginPath();
+              ctx.arc(pt.x, pt.y, rr, 0, 2 * Math.PI);
+              ctx.clip();
+              const imageScale = rr / Math.min(img.width, img.height);
+              ctx.drawImage(
+                img,
+                pt.x - img.width * imageScale,
+                pt.y - img.height * imageScale,
+                img.width * imageScale * 2,
+                img.height * imageScale * 2
+              );
+              ctx.stroke();
+            } else {
+              ctx.setLineDash([3, 3]);
+              ctx.beginPath();
+              ctx.moveTo(pt.x + rr, pt.y);
+              ctx.arc(pt.x, pt.y, rr, 0, 2 * Math.PI);
+              ctx.stroke();
+            }
             ctx.restore();
           }
 
@@ -391,6 +407,14 @@ $(() => {
         for (let i = 0; i < data.length; i++) {
           const info = data[i];
           info.day = i + 1;
+          if (info.day <= currentDay) {
+            const img = $("<img>")
+              .attr({ src: info.image_url })
+              .load(() => {
+                info.img = img[0];
+                console.log("Preloaded image for day", info.day);
+              });
+          }
           ps.addNode("day" + info.day, info);
         }
         let len = 1;
@@ -408,9 +432,7 @@ $(() => {
 
         $.each(images, (tag, url) => {
           const img = $("<img>")
-            .attr({
-              src: url
-            })
+            .attr({ src: url })
             .load(() => {
               imageStore[tag] = img[0];
             });
