@@ -246,6 +246,7 @@ $(() => {
 
       drawOverlay(ctx) {
         ctx.save();
+        ctx.globalAlpha = 0.7;
         snowStorm.redraw(ctx);
         ctx.restore();
       },
@@ -261,12 +262,14 @@ $(() => {
           activeDay -= 0.1;
         }
 
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.globalAlpha = 0.6;
         if (imageStore.background) {
           fillBox(ctx, imageStore.background);
-        } else {
-          ctx.fillStyle = "gray";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
+        ctx.globalAlpha = 1.0;
 
         const octx = offScreenCanvas.getContext("2d");
         octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
@@ -303,6 +306,7 @@ $(() => {
           ctx.translate(snowX, snowY);
           ctx.scale(snowScale, snowScale);
           snowFlake.render(ctx);
+
           ctx.restore();
           snowFlake.spinBy(0.01);
           snowStep++;
