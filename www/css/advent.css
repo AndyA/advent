@@ -85,13 +85,14 @@ a:hover {
 
 h1.title,
 #popup .body {
-  margin: 2vmin 30vmin 4vmin;
+  max-width: 70%;
+  margin: 1em auto;
   text-align: center;
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {
   #popup .body {
-    margin: 2vmin 3vmin 5vmin;
+    /* margin: 2vmin 3vmin 5vmin; */
   }
   /*
   #popup .header,
@@ -130,7 +131,7 @@ h2.date .month {
 h1.title {
   font-weight: normal;
   line-height: 1.25em;
-  font-size: 3vw;
+  font-size: 24px;
 }
 
 @media screen and (min-width: 1080px) {
@@ -147,10 +148,6 @@ h1 a {
   h2.date {
     left: 42%;
   }
-
-  h1.title {
-    margin: 14vmin 3vmin 2vmin;
-  }
 }
 
 /* #popup .day-image,
@@ -160,11 +157,19 @@ h1 a {
 
 #popup .day-image {
   padding: 0;
-  text-align: center;
+  margin: 1em auto;
+}
+
+#popup .day-image img,
+#popup .day-image video {
+  padding: 0;
+  margin: 1em auto;
 }
 
 #popup .synopsis {
-  margin: 1vmin 30vmin 2vmin;
+  margin: 2em auto;
+  max-width: 70%;
+  margin: 1em auto;
   padding: 0;
   line-height: 1.4em;
   font-size: 18px;
@@ -174,6 +179,7 @@ h1 a {
   #popup .day-image,
   #popup .synopsis {
     width: 100%;
+    max-width: 74vw;
   }
 }
 
@@ -197,7 +203,10 @@ h1 a {
   }
 
   h1.title {
-    margin: 14vmin 3vmin 0;
+    width: 100%;
+    max-width: 74vw;
+    margin: 2em auto 1em;
+    text-align: left;
   }
 }
 
