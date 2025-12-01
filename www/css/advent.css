@@ -178,6 +178,7 @@ h1 a {
   padding: 0;
   line-height: 1.4em;
   font-size: 18px;
+  text-align: center;
 }
 
 @media only screen and (max-aspect-ratio: 3/2) {
