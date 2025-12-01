@@ -1,9 +1,9 @@
-const adventDate = dt => {
+function adventDate(dt) {
   const mo = dt.getMonth();
   if (mo < 6) return 24;
   if (mo < 11) return 0;
   return Math.min(dt.getDate(), 24);
-};
+}
 
 function nth(x) {
   switch (Math.round(x % 20)) {
@@ -18,13 +18,13 @@ function nth(x) {
   }
 }
 
-const easer = (from, to, steps, step) => {
+function easer(from, to, steps, step) {
   if (step >= steps) return to;
   const inc = Math.pow(to / from, 1 / steps);
   return from * Math.pow(inc, step);
-};
+}
 
-const mediaElement = (data, onLoad) => {
+function mediaElement(data, onLoad) {
   const type = data.type || "image";
 
   switch (type) {
@@ -57,17 +57,31 @@ const mediaElement = (data, onLoad) => {
     default:
       throw new Error(`unknown media type ${type}`);
   }
-};
+}
 
-const wrapLink = (url, content) => {
+function wrapLink(url, content) {
   if (url) {
     return $("<a>").attr({ href: url, target: "_blank" }).append(content);
   } else {
     return content;
   }
-};
+}
 
-const showPopup = data => {
+function makeThumbnail(img, maxSize) {
+  const cvs = document.createElement("canvas");
+  const ctx = cvs.getContext("2d");
+  const scale = Math.max(img.width, img.height) / maxSize;
+  cvs.width = Math.floor(img.width / scale);
+  cvs.height = Math.floor(img.height / scale);
+
+  ctx.save();
+  ctx.filter = "blur(0.25px)";
+  ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
+  ctx.restore();
+  return cvs;
+}
+
+function showPopup(data) {
   $("#popup .date .day-num").text(data.day + nth(data.day));
   $("#popup .title").html(data.title);
   $("#popup .synopsis").html(data.synopsis ?? "");
@@ -78,23 +92,12 @@ const showPopup = data => {
   });
   const media = wrapLink(link.attr("href"), elt);
   $("#popup .day-image").empty().append(media);
-};
+}
 
-const hidePopup = () => {
+function hidePopup() {
   $("#popup video").get(0)?.pause();
   $("#popup").hide();
-};
-
-const getQuery = () => {
-  const queryString = window.location.search.substring(1);
-  const vars = queryString.split("&");
-  const query = {};
-  for (const variable of vars) {
-    const pair = variable.split("=");
-    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-  }
-  return query;
-};
+}
 
 const fillBox = (ctx, img) => {
   const cw = ctx.canvas.width;
@@ -115,9 +118,9 @@ const fillBox = (ctx, img) => {
   ctx.fillRect(0, 0, cw, ch);
 };
 
-const rgba = (r, g, b, a) => {
+function rgba(r, g, b, a) {
   return `rgba(${r}, ${g}, ${b}, ${a})`;
-};
+}
 
 class Debouncer {
   constructor(delay) {
@@ -236,18 +239,18 @@ $(() => {
             ctx.save();
             ctx.strokeStyle = white;
             const rr = (nw * 4) / 5;
-            if (node.data.img) {
-              const img = node.data.img;
+            if (node.data.thumb) {
+              const thumb = node.data.thumb;
               ctx.beginPath();
               ctx.arc(pt.x, pt.y, rr, 0, 2 * Math.PI);
               ctx.clip();
-              const imageScale = rr / Math.min(img.width, img.height);
+              const imageScale = rr / Math.min(thumb.width, thumb.height);
               ctx.drawImage(
-                img,
-                pt.x - img.width * imageScale,
-                pt.y - img.height * imageScale,
-                img.width * imageScale * 2,
-                img.height * imageScale * 2
+                thumb,
+                pt.x - thumb.width * imageScale,
+                pt.y - thumb.height * imageScale,
+                thumb.width * imageScale * 2,
+                thumb.height * imageScale * 2
               );
               ctx.stroke();
             } else {
@@ -389,7 +392,16 @@ $(() => {
     scaleSnow(cvs.width, cvs.height);
   };
 
-  const query = getQuery();
+  const query = (() => {
+    const queryString = window.location.search.substring(1);
+    const vars = queryString.split("&");
+    const query = {};
+    for (const variable of vars) {
+      const pair = variable.split("=");
+      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+    }
+    return query;
+  })();
   if (query.day !== undefined)
     currentDay = Math.max(1, Math.min(parseInt(query.day), 24));
 
@@ -445,6 +457,7 @@ $(() => {
               .attr({ src: info.image_url })
               .load(() => {
                 info.img = img[0];
+                info.thumb = makeThumbnail(img[0], 100);
                 console.log("Preloaded image for day", info.day);
               });
           }
