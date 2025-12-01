@@ -17,4 +17,9 @@ for (const day of data) {
   }
 }
 
-console.log(allFiles);
+for (const file of allFiles) {
+  const newFile = path.join("unused", path.basename(file));
+  fs.mkdirSync(path.dirname(newFile), { recursive: true });
+  console.log(`Moving unused file: ${file} -> ${newFile}`);
+  fs.renameSync(file, newFile);
+}
