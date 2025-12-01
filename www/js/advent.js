@@ -113,6 +113,23 @@ const rgba = (r, g, b, a) => {
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 };
 
+class Debouncer {
+  constructor(delay) {
+    this.delay = delay;
+    this.timer = null;
+  }
+
+  trigger(func) {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+    this.timer = setTimeout(() => {
+      func();
+      this.timer = null;
+    }, this.delay);
+  }
+}
+
 $(() => {
   let snowStorm = null;
   let snowFlake = null;
@@ -131,6 +148,8 @@ $(() => {
   let snowEndScale;
   let snowEndX;
   let snowEndY;
+
+  const debounce = new Debouncer(1000);
 
   const scaleSnow = (width, height) => {
     snowStartX = width / 2;
@@ -387,13 +406,17 @@ $(() => {
       birthRate: 3
     });
 
-    $(window).mousemove(ev => {
-      const xp = ev.pageX / cvs.width - 0.5;
-      snowStorm.setDrift(xp);
-      // })
-      // .resize(() => {
-      //   resize(cvs, ps);
-    });
+    $(window)
+      .mousemove(ev => {
+        const xp = ev.pageX / cvs.width - 0.5;
+        snowStorm.setDrift(xp);
+      })
+      .resize(() => {
+        debounce.trigger(() => {
+          resize(cvs, ps);
+          redraw();
+        });
+      });
 
     const ps = arbor.ParticleSystem(1000, 400, 1);
 
