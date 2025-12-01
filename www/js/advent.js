@@ -44,7 +44,8 @@ function mediaElement(data, onLoad) {
           controls: false,
           loop: true,
           width: 300,
-          poster: data.image_url
+          poster: data.image_url,
+          playsinline: true
         })
         .append(
           $("<source>").attr({
@@ -378,7 +379,7 @@ $(() => {
     return graph;
   };
 
-  const resize = (cvs, ps) => {
+  function resize(cvs, ps) {
     cvs.width = $(window).width();
     cvs.height = $(window).height();
     ps.screenSize(cvs.width, cvs.height);
@@ -390,7 +391,7 @@ $(() => {
     offScreenCanvas.width = cvs.width;
     offScreenCanvas.height = cvs.height;
     scaleSnow(cvs.width, cvs.height);
-  };
+  }
 
   const query = (() => {
     const queryString = window.location.search.substring(1);
