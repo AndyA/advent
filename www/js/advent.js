@@ -153,12 +153,19 @@ class Debouncer {
   }
 }
 
+function getCurrentDay() {
+  const query = getQuery();
+  if (query.day !== undefined)
+    return Math.max(1, Math.min(parseInt(query.day), 24));
+  return adventDate(new Date());
+}
+
 $(() => {
   let snowStorm = null;
   let snowFlake = null;
   let offScreenCanvas = null;
 
-  let currentDay = adventDate(new Date());
+  const currentDay = getCurrentDay();
 
   let activeDay = -2;
 
@@ -394,10 +401,6 @@ $(() => {
     offScreenCanvas.height = cvs.height;
     scaleSnow(cvs.width, cvs.height);
   }
-
-  const query = getQuery();
-  if (query.day !== undefined)
-    currentDay = Math.max(1, Math.min(parseInt(query.day), 24));
 
   $(document).on("keypress", event => {
     if (event.which == 27) hidePopup();
