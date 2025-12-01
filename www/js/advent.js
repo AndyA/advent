@@ -105,6 +105,8 @@ const fillBox = (ctx, img) => {
   const iw = img.width;
   const ih = img.height;
 
+  const sc = Math.max(cw / iw, ch / ih);
+
   if (cw / ch < iw / ih) {
     const sc = ch / ih;
     ctx.drawImage(img, (iw - cw / sc) / 2, 0, cw / sc, ih, 0, 0, cw, ch);
@@ -114,7 +116,7 @@ const fillBox = (ctx, img) => {
   }
 
   // translucent overlay
-  ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
   ctx.fillRect(0, 0, cw, ch);
 };
 
@@ -274,7 +276,6 @@ $(() => {
 
       drawOverlay(ctx) {
         ctx.save();
-        ctx.globalAlpha = 0.7;
         snowStorm.redraw(ctx);
         ctx.restore();
       },
@@ -293,11 +294,9 @@ $(() => {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.globalAlpha = 0.6;
         if (imageStore.background) {
           fillBox(ctx, imageStore.background);
         }
-        ctx.globalAlpha = 1.0;
 
         const octx = offScreenCanvas.getContext("2d");
         octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
