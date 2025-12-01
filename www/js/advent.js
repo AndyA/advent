@@ -43,7 +43,6 @@ function mediaElement(data, onLoad) {
           autoplay: true,
           controls: false,
           loop: true,
-          width: 300,
           poster: data.image_url,
           playsinline: true
         })
