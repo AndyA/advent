@@ -1,21 +1,3 @@
-function adventDate(dt) {
-  const mo = dt.getMonth();
-  if (mo < 6) return 24;
-  if (mo < 11) return 0;
-  return Math.min(dt.getDate(), 24);
-}
-
-function getQuery() {
-  const queryString = window.location.search.substring(1);
-  const vars = queryString.split("&");
-  const query = {};
-  for (const variable of vars) {
-    const pair = variable.split("=");
-    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-  }
-  return query;
-}
-
 function nth(x) {
   switch (Math.round(x % 20)) {
     default:
@@ -117,8 +99,6 @@ function fillBox(ctx, img) {
   const iw = img.width;
   const ih = img.height;
 
-  const sc = Math.max(cw / iw, ch / ih);
-
   if (cw / ch < iw / ih) {
     const sc = ch / ih;
     ctx.drawImage(img, (iw - cw / sc) / 2, 0, cw / sc, ih, 0, 0, cw, ch);
@@ -153,23 +133,28 @@ class Debouncer {
   }
 }
 
+function adventDate(dt) {
+  const mo = dt.getMonth();
+  if (mo < 1) return 24;
+  if (mo < 11) return 0;
+  return Math.min(dt.getDate(), 24);
+}
+
 function getCurrentDay() {
-  const query = getQuery();
-  if (query.day !== undefined)
-    return Math.max(1, Math.min(parseInt(query.day), 24));
+  const p = new URLSearchParams(window.location.search);
+  if (p.has("day")) return Math.max(1, Math.min(parseInt(p.get("day")), 24));
   return adventDate(new Date());
 }
 
 $(() => {
+  const currentDay = getCurrentDay();
+  const imageStore = {};
+
   let snowStorm = null;
   let snowFlake = null;
   let offScreenCanvas = null;
 
-  const currentDay = getCurrentDay();
-
   let activeDay = -2;
-
-  const imageStore = {};
 
   let snowStep;
   let snowSteps;
@@ -195,6 +180,7 @@ $(() => {
     snowSteps = currentDay * 10 + 20;
     snowEndX = null;
     snowEndY = null;
+
     scaleSnow(cvs.width, cvs.height);
 
     const graph = {
@@ -240,15 +226,15 @@ $(() => {
 
           const isToday = node.data.day == currentDay;
 
-          const nw =
+          const radius =
             age >= 0 ? radiusPast / (1 + Math.sqrt(age / 3)) : radiusFuture;
-          node.data.radius = nw; // cached for later
+          node.data.radius = radius; // cached for later
 
           // Outer circle
           ctx.strokeStyle = white;
           ctx.beginPath();
-          ctx.moveTo(pt.x + nw, pt.y);
-          ctx.arc(pt.x, pt.y, nw, 0, 2 * Math.PI);
+          ctx.moveTo(pt.x + radius, pt.y);
+          ctx.arc(pt.x, pt.y, radius, 0, 2 * Math.PI);
           ctx.save();
           ctx.globalCompositeOperation = "destination-out";
           ctx.fill();
@@ -259,7 +245,7 @@ $(() => {
           if (age >= 1) {
             ctx.save();
             ctx.strokeStyle = white;
-            const rr = (nw * 4) / 5;
+            const rr = (radius * 4) / 5;
             if (node.data.thumb) {
               const thumb = node.data.thumb;
               ctx.beginPath();
