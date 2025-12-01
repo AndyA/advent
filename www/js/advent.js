@@ -357,7 +357,8 @@ $(() => {
     ps.screenPadding(cvs.height / 10, cvs.width / 10);
 
     // Create offscreen canvas
-    offScreenCanvas = document.createElement("canvas");
+    if (offScreenCanvas === null)
+      offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = cvs.width;
     offScreenCanvas.height = cvs.height;
     scaleSnow(cvs.width, cvs.height);
