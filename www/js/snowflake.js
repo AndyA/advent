@@ -21,7 +21,10 @@ class SnowFlake {
 
   spinBy(angle) {
     this.rotate += angle;
-    this.scaleAngle += 0.04;
+    if (this.rotate > 2 * Math.PI) {
+      this.rotate -= 2 * Math.PI;
+    }
+    this.scaleAngle += angle * 4;
     if (this.scaleAngle > 2 * Math.PI) {
       this.scaleAngle -= 2 * Math.PI;
     }
