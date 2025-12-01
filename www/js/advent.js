@@ -39,10 +39,16 @@ const mediaElement = (data, onLoad) => {
 
     case "video":
       return $("<video>")
-        .attr({ autoplay: true, controls: false, loop: true, width: 300 })
+        .attr({
+          autoplay: true,
+          controls: false,
+          loop: true,
+          width: 300,
+          poster: data.image_url
+        })
         .append(
           $("<source>").attr({
-            src: data.image_url,
+            src: data.media_url,
             type: "video/mp4"
           })
         )
