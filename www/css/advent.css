@@ -155,7 +155,7 @@ h1 a {
 
 #popup .day-image {
   padding: 0;
-  margin: 1em auto;
+  margin: 1em auto 0;
 }
 
 #popup .day-image img,
@@ -226,6 +226,12 @@ h1 a {
     margin: 3em auto 1em;
     text-align: left;
   }
+}
+
+#popup .caption {
+  margin: 0 0 1em;
+  color: #666;
+  font-size: small;
 }
 
 a.button {

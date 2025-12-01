@@ -85,6 +85,7 @@ function showPopup(data) {
   $("#popup .date .day-num").text(data.day + nth(data.day));
   $("#popup .title").html(data.title);
   $("#popup .synopsis").html(data.synopsis ?? "");
+  $("#popup .caption").html(data.caption ?? "");
 
   const link = $("#popup .synopsis a").first();
   const elt = mediaElement(data, () => {

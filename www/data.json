@@ -11,13 +11,15 @@
     "image_url": "i/hh-day1.jpg",
     "title": "Giving Tuesday",
     "synopsis": "Yin leads our <a href=\"https://hundredheroines.org/giving-tuesday-25/\" target=\"_blank\">Giving Tuesday campaign</a>",
+    "caption": "Image © Rita Long",
     "background_url": "i/hh-nailsworth-church.png"
   },
   {
     "day": 3,
     "image_url": "i/hh-anne-brigman.png",
-    "title": "Born #OTD 1869 - Anne Brigman (1869-1950)",
-    "synopsis": "<a href=\"https://hundredheroines.org/hhblog/anne-brigman/\" target=\"_blank\">Anne Brigman</a> was an American photographer, artist and feminist icon. She freed herself and the women she photographed from corsets and clichés, revolutionising female nude photography.",
+    "title": "Born #OTD 1869 - Anne Brigman",
+    "synopsis": "<a href=\"https://hundredheroines.org/hhblog/anne-brigman/\" target=\"_blank\">Anne Brigman</a> (1869-1950) was an American photographer, artist and feminist icon. She freed herself and the women she photographed from corsets and clichés, revolutionising female nude photography.",
+    "caption": "'The Storm Tree' by Anne Brigman, 1911",
     "background_url": "i/bg-day15.jpeg"
   },
   {
@@ -52,9 +54,10 @@
   },
   {
     "day": 8,
-    "image_url": "i/hh-snow4.jpg",
-    "title": "***",
-    "synopsis": "Synopsis",
+    "image_url": "i/hh-day-8-claude-cahun.jpg",
+    "title": "Died #OTD 1954 - Claude Cahun",
+    "synopsis": "Although artists have long been tackling gender norms and at the forefront of the LGBTQ+ rights movement, history has not always been kind to them. Why not (re)discover the work of gender nonconforming artist <a href=\"https://hundredheroines.org/historical-heroines/hidden-histories-claude-cahun-nonbinary-photographer/\" target=\"_blank\">Claude Cahun</a> today?",
+    "caption": "Self portrait (in robe with masks attached), 1928 © Claude Cahun.<br /> Courtesy of the Jersey Heritage Collections",
     "background_url": "i/hh-snow4.jpg"
   },
   {
