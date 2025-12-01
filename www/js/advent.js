@@ -387,14 +387,13 @@ $(() => {
       birthRate: 3
     });
 
-    $(window)
-      .mousemove(ev => {
-        const xp = ev.pageX / cvs.width - 0.5;
-        snowStorm.setDrift(xp);
-      })
-      .resize(() => {
-        resize(cvs, ps);
-      });
+    $(window).mousemove(ev => {
+      const xp = ev.pageX / cvs.width - 0.5;
+      snowStorm.setDrift(xp);
+      // })
+      // .resize(() => {
+      //   resize(cvs, ps);
+    });
 
     const ps = arbor.ParticleSystem(1000, 400, 1);
 
