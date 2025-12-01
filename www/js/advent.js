@@ -288,6 +288,7 @@ $(() => {
       redraw() {
         ctx.save();
 
+        // Keep moving towards current day
         if (Math.abs(currentDay - activeDay) < 0.1) {
           activeDay = currentDay;
         } else if (activeDay < currentDay) {
