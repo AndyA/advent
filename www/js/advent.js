@@ -158,6 +158,7 @@ $(() => {
 
   let snowStep;
   let snowSteps;
+  let snowStartX;
   let snowStartY;
   let snowStartScale;
   let snowEndScale;
