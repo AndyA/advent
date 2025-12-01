@@ -10,8 +10,6 @@ class SnowFlake {
     this.rotate = 0;
     this.scaleAngle = 0;
     this.branches = this.makeBranch(1, 1, 1);
-
-    console.log(this.branches);
   }
 
   static around(centre, spread, rolloff) {

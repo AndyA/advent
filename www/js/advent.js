@@ -5,6 +5,17 @@ function adventDate(dt) {
   return Math.min(dt.getDate(), 24);
 }
 
+function getQuery() {
+  const queryString = window.location.search.substring(1);
+  const vars = queryString.split("&");
+  const query = {};
+  for (const variable of vars) {
+    const pair = variable.split("=");
+    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+  }
+  return query;
+}
+
 function nth(x) {
   switch (Math.round(x % 20)) {
     default:
@@ -100,7 +111,7 @@ function hidePopup() {
   $("#popup").hide();
 }
 
-const fillBox = (ctx, img) => {
+function fillBox(ctx, img) {
   const cw = ctx.canvas.width;
   const ch = ctx.canvas.height;
   const iw = img.width;
@@ -119,7 +130,7 @@ const fillBox = (ctx, img) => {
   // translucent overlay
   ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
   ctx.fillRect(0, 0, cw, ch);
-};
+}
 
 function rgba(r, g, b, a) {
   return `rgba(${r}, ${g}, ${b}, ${a})`;
@@ -163,34 +174,34 @@ $(() => {
 
   const debounce = new Debouncer(1000);
 
-  const scaleSnow = (width, height) => {
+  function scaleSnow(width, height) {
     snowStartX = width / 2;
     snowStartY = height / 2;
     snowStartScale = Math.min(snowStartX, snowStartY) * 3;
     snowEndScale = (width + height) / 50;
-  };
+  }
 
-  const makeRenderer = (canvas, click) => {
-    const ctx = canvas.getContext("2d");
+  function makeRenderer(cvs) {
+    const ctx = cvs.getContext("2d");
 
     snowStep = 0;
     snowSteps = currentDay * 10 + 20;
     snowEndX = null;
     snowEndY = null;
-    scaleSnow(canvas.width, canvas.height);
+    scaleSnow(cvs.width, cvs.height);
 
     const graph = {
       init(system) {
         this.ps = system;
-        this.ps.screenSize(canvas.width, canvas.height);
-        this.ps.screenPadding(canvas.height / 10, canvas.width / 10);
+        this.ps.screenSize(cvs.width, cvs.height);
+        this.ps.screenPadding(cvs.height / 10, cvs.width / 10);
         this.initMouseHandling();
       },
 
       drawGraph(ctx) {
         const alphaPast = 1;
         const alphaFuture = 0.4;
-        const radiusPast = (canvas.width + canvas.height) / 30;
+        const radiusPast = (cvs.width + cvs.height) / 30;
         const radiusFuture = radiusPast / 3;
 
         ctx.save();
@@ -293,7 +304,7 @@ $(() => {
         }
 
         ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
 
         if (imageStore.background) {
           fillBox(ctx, imageStore.background);
@@ -343,40 +354,32 @@ $(() => {
         ctx.restore();
       },
 
+      hitTest(e) {
+        const pos = $(cvs).offset();
+        const mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+        const hit = this.ps.nearest(mp);
+        const valid =
+          hit &&
+          hit.distance <= hit.node.data.radius &&
+          hit.node.data.day <= activeDay;
+        return valid ? hit : null;
+      },
+
       initMouseHandling() {
-        $(canvas)
+        $(cvs)
           .click(e => {
-            const pos = $(canvas).offset();
-            const mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-            const hit = this.ps.nearest(mp);
-            if (hit) click(hit);
-            if (
-              hit &&
-              hit.distance <= hit.node.data.radius &&
-              hit.node.data.day <= activeDay
-            ) {
-              showPopup(hit.node.data);
-            }
+            const hit = this.hitTest(e);
+            if (hit) showPopup(hit.node.data);
           })
           .mousemove(e => {
-            const pos = $(canvas).offset();
-            const mp = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
-            const hit = this.ps.nearest(mp);
-            if (hit) click(hit);
-            if (
-              hit &&
-              hit.distance <= hit.node.data.radius &&
-              hit.node.data.day <= activeDay
-            ) {
-              $(canvas).addClass("clicky");
-            } else {
-              $(canvas).removeClass("clicky");
-            }
+            const hit = this.hitTest(e);
+            if (hit) $(cvs).addClass("clicky");
+            else $(cvs).removeClass("clicky");
           });
       }
     };
     return graph;
-  };
+  }
 
   function resize(cvs, ps) {
     cvs.width = $(window).width();
@@ -392,16 +395,7 @@ $(() => {
     scaleSnow(cvs.width, cvs.height);
   }
 
-  const query = (() => {
-    const queryString = window.location.search.substring(1);
-    const vars = queryString.split("&");
-    const query = {};
-    for (const variable of vars) {
-      const pair = variable.split("=");
-      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-    }
-    return query;
-  })();
+  const query = getQuery();
   if (query.day !== undefined)
     currentDay = Math.max(1, Math.min(parseInt(query.day), 24));
 
@@ -444,7 +438,7 @@ $(() => {
       gravity: true
     });
 
-    ps.renderer = makeRenderer(cvs, () => {});
+    ps.renderer = makeRenderer(cvs);
 
     $.get("data.json")
       .then(data => {
@@ -458,7 +452,6 @@ $(() => {
               .load(() => {
                 info.img = img[0];
                 info.thumb = makeThumbnail(img[0], 100);
-                console.log("Preloaded image for day", info.day);
               });
           }
           ps.addNode("day" + info.day, info);
