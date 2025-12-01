@@ -262,14 +262,14 @@ $(() => {
           activeDay -= 0.1;
         }
 
-        // ctx.globalAlpha = 0.6;
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.globalAlpha = 0.6;
         if (imageStore.background) {
           fillBox(ctx, imageStore.background);
-        } else {
-          ctx.fillStyle = "black";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
-        // ctx.globalAlpha = 1.0;
+        ctx.globalAlpha = 1.0;
 
         const octx = offScreenCanvas.getContext("2d");
         octx.clearRect(0, 0, offScreenCanvas.width, offScreenCanvas.height);
