@@ -86,6 +86,9 @@ function showPopup(data) {
   });
   const media = wrapLink(link.attr("href"), elt);
   $("#popup .day-image").empty().append(media);
+
+  // Matomo
+  _paq.push(["trackEvent", "Reveal", "showPopup", `${data.day}`]);
 }
 
 function hidePopup() {
