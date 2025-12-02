@@ -95,7 +95,7 @@ class SnowFlake {
     ctx.save();
     ctx.lineCap = "round";
     ctx.rotate(this.rotate);
-    const scale = 0.95 + 0.1 * Math.sin(this.scaleAngle);
+    const scale = 0.85 + 0.1 * Math.sin(this.scaleAngle);
     ctx.scale(scale, scale);
     const rep = this.opt.oneBranch ? 1 : 6;
     for (let i = 0; i < rep; i++) {

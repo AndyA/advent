@@ -173,8 +173,8 @@ $(() => {
   function scaleSnow(width, height) {
     snowStartX = width / 2;
     snowStartY = height / 2;
-    snowStartScale = Math.min(snowStartX, snowStartY) * 3;
-    snowEndScale = (width + height) / 50;
+    snowStartScale = Math.max(snowStartX, snowStartY) * 3;
+    snowEndScale = Math.max(width, height) / 22;
   }
 
   function makeRenderer(cvs) {
@@ -198,7 +198,7 @@ $(() => {
       drawGraph(ctx) {
         const alphaPast = 1;
         const alphaFuture = 0.4;
-        const radiusPast = (cvs.width + cvs.height) / 30;
+        const radiusPast = Math.max(cvs.width, cvs.height) / 17;
         const radiusFuture = radiusPast / 3;
 
         ctx.save();
@@ -231,7 +231,7 @@ $(() => {
           const isToday = node.data.day == currentDay;
 
           const radius =
-            age >= 0 ? radiusPast / (1 + Math.sqrt(age / 3)) : radiusFuture;
+            age >= 0 ? radiusPast / (1 + Math.sqrt(age / 5)) : radiusFuture;
           node.data.radius = radius; // cached for later
 
           // Outer circle
@@ -455,7 +455,7 @@ $(() => {
           ps.addEdge("day" + i, "day" + (i + 1), {
             length: len
           });
-          len *= 1.1;
+          // len += 0.1;
         }
 
         const images = {
