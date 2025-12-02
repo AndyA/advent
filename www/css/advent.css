@@ -237,6 +237,12 @@ h1 a {
   font-size: small;
 }
 
+@media only screen and (max-aspect-ratio: 1/1) {
+  #popup .caption {
+    text-align: left;
+  }
+}
+
 #popup .donate {
   margin: 2em 1em;
   padding: 1em 1em 0;
@@ -256,15 +262,15 @@ h1 a {
   margin: 1em auto;
 }
 
-#popup .donate .narrow {
+#popup .narrow {
   display: none;
 }
 
 @media only screen and (max-aspect-ratio: 1/1) {
-  #popup .donate .narrow {
+  #popup .narrow {
     display: inline;
   }
-  #popup .donate .wide {
+  #popup .wide {
     display: none;
   }
 }
