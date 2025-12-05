@@ -141,10 +141,10 @@
   },
   {
     "day": 20,
-    "image_url": "i/bg-day20.jpg",
+    "image_url": "i/hh-snow24.jpg",
     "title": "***",
     "synopsis": "Synopsis",
-    "background_url": "i/bg-day20.jpg"
+    "background_url": "i/hh-snow24.jpg"
   },
   {
     "day": 21,
@@ -169,9 +169,9 @@
   },
   {
     "day": 24,
-    "image_url": "i/hh-snow24.jpg",
+    "image_url": "i/bg-day20.jpg",
     "title": "***",
     "synopsis": "Synopsis",
-    "background_url": "i/hh-snow24.jpg"
+    "background_url": "i/bg-day20.jpg"
   }
 ]
