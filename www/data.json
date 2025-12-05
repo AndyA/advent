@@ -134,10 +134,10 @@
   },
   {
     "day": 19,
-    "image_url": "i/bg-day19-santas.jpg",
+    "image_url": "i/hh-snow19.jpg",
     "title": "***",
     "synopsis": "Synopsis",
-    "background_url": "i/bg-day19-santas.jpg"
+    "background_url": "i/hh-snow19.jpg"
   },
   {
     "day": 20,
@@ -155,10 +155,10 @@
   },
   {
     "day": 22,
-    "image_url": "i/santas-close.jpg",
+    "image_url": "i/hh-snow22.jpg",
     "title": "***",
     "synopsis": "Synopsis",
-    "background_url": "i/santas-close.jpg"
+    "background_url": "i/hh-snow22.jpg"
   },
   {
     "day": 23,
@@ -169,9 +169,9 @@
   },
   {
     "day": 24,
-    "image_url": "i/santas2.jpg",
+    "image_url": "i/hh-snow24.jpg",
     "title": "***",
     "synopsis": "Synopsis",
-    "background_url": "i/santas2.jpg"
+    "background_url": "i/hh-snow24.jpg"
   }
 ]
