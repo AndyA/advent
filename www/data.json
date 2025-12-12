@@ -87,7 +87,7 @@
     "day": 12,
     "image_url": "i/hh-day12.jpg",
     "title": "Looking for stocking fillers?",
-    "synopsis": "We have these beautiful notebooks (created by our very own Rita Long), necklaces, keyrings and more -all for £5 or less in the museum shop. While youre here, why not visit our <a href=\"https://hundredheroines.org/featured/done-doing-time/\" target=\"_blank\">Hinda Schuman exhibition</a>... We're open from 11am - 4pm, Thursdays, Friday and Saturdays.",
+    "synopsis": "We have these beautiful notebooks (created by our very own Rita Long), necklaces, keyrings and more -all for £5 or less in the museum shop. While you're here, why not visit our <a href=\"https://hundredheroines.org/featured/done-doing-time/\" target=\"_blank\">Hinda Schuman exhibition</a>... We're open from 11am - 4pm, Thursdays, Friday and Saturdays.",
     "background_url": "i/bg-day12.jpeg"
   },
   {
@@ -100,15 +100,16 @@
   {
     "day": 14,
     "image_url": "i/bg-day14.jpeg",
-    "title": "***",
+    "title": "",
     "synopsis": "Synopsis",
     "background_url": "i/bg-day14.jpeg"
   },
   {
     "day": 15,
-    "image_url": "i/bg-day15.jpeg",
-    "title": "***",
-    "synopsis": "Synopsis",
+    "image_url": "https://www.youtube.com/watch?v=or63IJvgpDs",
+    "title": "Gulshan Khan",
+    "synopsis": "Throwback to Gulshan Khan's talk with Stroud Times, about her participation in our Poisoned Futures exhibition",
+    "type": "video",
     "background_url": "i/bg-day15.jpeg"
   },
   {
