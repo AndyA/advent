@@ -136,16 +136,19 @@ class Debouncer {
   }
 }
 
+const MAX_DAY = 25;
+
 function adventDate(dt) {
   const mo = dt.getMonth();
-  if (mo < 1) return 24;
+  if (mo < 1) return MAX_DAY;
   if (mo < 11) return 0;
-  return Math.min(dt.getDate(), 24);
+  return Math.min(dt.getDate(), MAX_DAY);
 }
 
 function getCurrentDay() {
   const p = new URLSearchParams(window.location.search);
-  if (p.has("day")) return Math.max(1, Math.min(parseInt(p.get("day")), 24));
+  if (p.has("day"))
+    return Math.max(1, Math.min(parseInt(p.get("day")), MAX_DAY));
   return adventDate(new Date());
 }
 
